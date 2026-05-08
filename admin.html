@@ -3,2035 +3,782 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin – Pandit Ji Caterers</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>Admin — Pandit Ji Caterers</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyC-Z4GGVJfkUFkPjXihi2YyVZAOlxavAAU",
+  authDomain: "panditji-loyalty.firebaseapp.com",
+  projectId: "panditji-loyalty",
+  storageBucket: "panditji-loyalty.firebasestorage.app",
+  messagingSenderId: "625570900306",
+  appId: "1:625570900306:web:d73c2f445a99436774f28b"
+});
+const db = firebase.firestore();
+</script>
 <style>
-:root {
-  --bg: #0d0d0d;
-  --surface: #161616;
-  --surface2: #1f1f1f;
-  --surface3: #2a2a2a;
-  --border: rgba(255,255,255,0.07);
-  --saffron: #FF6B00;
-  --gold: #FFB800;
-  --red: #c0392b;
-  --green: #27ae60;
-  --blue: #2980b9;
-  --purple: #8e44ad;
-  --text: #f0f0f0;
-  --text2: #aaa;
-  --text3: #666;
-  --sidebar-w: 240px;
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ===== LOGIN ===== */
-#login-screen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(ellipse at center, #1a0800 0%, #0d0d0d 70%);
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-}
-
-.login-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 3rem 2.5rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-}
-
-.login-logo {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.login-logo .icon { font-size: 2.5rem; }
-.login-logo h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
-  color: var(--gold);
-  margin-top: 0.5rem;
-}
-.login-logo p { color: var(--text2); font-size: 0.8rem; }
-
-.login-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 0.4rem;
-  display: block;
-}
-
-.login-input {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
-  outline: none;
-  transition: all 0.3s;
-  margin-bottom: 1rem;
-}
-
-.login-input:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,107,0,0.1); }
-
-.login-btn {
-  width: 100%;
-  background: linear-gradient(135deg, var(--saffron), var(--gold));
-  border: none;
-  border-radius: 12px;
-  padding: 0.9rem;
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.3s;
-  margin-top: 0.5rem;
-}
-
-.login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,107,0,0.4); }
-.login-error { color: #e74c3c; font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-
-/* ===== SIDEBAR ===== */
-#admin-app { display: none; }
-
-.sidebar {
-  position: fixed;
-  left: 0; top: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  overflow-y: auto;
-}
-
-.sidebar-brand {
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-brand .brand-icon { font-size: 1.5rem; }
-.sidebar-brand h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1rem;
-  color: var(--gold);
-  margin-top: 0.3rem;
-  line-height: 1.2;
-}
-.sidebar-brand p { font-size: 0.7rem; color: var(--text3); }
-
-.nav-section {
-  padding: 1rem 0.8rem 0.5rem;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 1.2rem;
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 10px;
-  margin: 0.1rem 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: none;
-  background: none;
-  width: calc(100% - 1rem);
-  text-align: left;
-}
-
-.nav-item .nav-icon { font-size: 1rem; width: 20px; }
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: rgba(255,107,0,0.15); color: var(--saffron); border: 1px solid rgba(255,107,0,0.2); }
-
-.sidebar-footer {
-  margin-top: auto;
-  padding: 1rem;
-  border-top: 1px solid var(--border);
-}
-
-.owner-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.6rem 0.8rem;
-  background: var(--surface2);
-  border-radius: 10px;
-}
-
-.owner-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--saffron), var(--gold));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.9rem; font-weight: 700; color: white; flex-shrink: 0;
-}
-
-.owner-info p { font-size: 0.75rem; font-weight: 600; color: var(--text); }
-.owner-info span { font-size: 0.65rem; color: var(--text3); }
-
-.logout-btn {
-  background: none; border: none; color: var(--text3);
-  cursor: pointer; font-size: 1rem; margin-left: auto;
-  transition: color 0.2s;
-}
-.logout-btn:hover { color: var(--red); }
-
-/* ===== MAIN CONTENT ===== */
-.main-content {
-  margin-left: var(--sidebar-w);
-  min-height: 100vh;
-  padding: 2rem;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.page-title { font-size: 1.4rem; font-weight: 700; }
-.page-title span { color: var(--saffron); }
-
-.topbar-right { display: flex; align-items: center; gap: 1rem; }
-
-.live-badge {
-  background: rgba(39,174,96,0.15);
-  border: 1px solid rgba(39,174,96,0.3);
-  color: var(--green);
-  padding: 0.3rem 0.8rem;
-  border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.live-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  animation: pulse 1.5s ease infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.3); }
-}
-
-/* ===== PANELS ===== */
-.panel { display: none; }
-.panel.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform:translateY(0); } }
-
-/* ===== STAT CARDS ===== */
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.2rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-}
-
-.stat-card:hover { border-color: rgba(255,107,0,0.3); transform: translateY(-2px); }
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--saffron), var(--gold));
-}
-
-.stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.stat-num { font-size: 1.8rem; font-weight: 700; font-family: 'Playfair Display', serif; }
-.stat-label { font-size: 0.72rem; color: var(--text2); margin-top: 0.2rem; }
-.stat-delta { font-size: 0.72rem; margin-top: 0.4rem; font-weight: 600; }
-.stat-delta.up { color: var(--green); }
-.stat-delta.down { color: var(--red); }
-
-/* ===== SECTION CARD ===== */
-.section-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.section-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.2rem;
-}
-
-.section-card-head h3 { font-size: 0.95rem; font-weight: 700; }
-.section-card-head h3 span { font-size: 1rem; margin-right: 0.4rem; }
-
-.btn-sm-action {
-  background: rgba(255,107,0,0.1);
-  border: 1px solid rgba(255,107,0,0.3);
-  color: var(--saffron);
-  padding: 0.3rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-}
-.btn-sm-action:hover { background: rgba(255,107,0,0.2); }
-
-/* ===== CHART BARS ===== */
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
-  height: 100px;
-  margin-bottom: 0.5rem;
-}
-
-.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
-.bar-fill {
-  width: 100%;
-  border-radius: 6px 6px 0 0;
-  background: linear-gradient(to top, var(--saffron), var(--gold));
-  min-height: 4px;
-  transition: height 0.5s ease;
-}
-.bar-label { font-size: 0.65rem; color: var(--text3); }
-.bar-val { font-size: 0.65rem; color: var(--text2); font-weight: 600; }
-
-/* ===== ALERT CARDS ===== */
-.alert-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-  transition: all 0.2s;
-}
-
-.alert-card:hover { border-color: rgba(255,107,0,0.3); }
-
-.alert-icon-box {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; flex-shrink: 0;
-}
-
-.alert-icon-box.red { background: rgba(192,57,43,0.15); }
-.alert-icon-box.yellow { background: rgba(255,184,0,0.15); }
-.alert-icon-box.green { background: rgba(39,174,96,0.15); }
-.alert-icon-box.blue { background: rgba(41,128,185,0.15); }
-
-.alert-info { flex: 1; }
-.alert-info p { font-size: 0.85rem; font-weight: 500; color: var(--text); }
-.alert-info span { font-size: 0.72rem; color: var(--text2); }
-
-.btn-alert {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text2);
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.btn-alert:hover { background: rgba(255,107,0,0.1); border-color: var(--saffron); color: var(--saffron); }
-
-/* ===== CUSTOMER TABLE ===== */
-.customer-table { width: 100%; border-collapse: collapse; }
-.customer-table th {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 0.6rem 0.8rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-
-.customer-table td {
-  padding: 0.8rem;
-  font-size: 0.83rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-
-.customer-table tr:last-child td { border-bottom: none; }
-.customer-table tr:hover td { background: var(--surface2); }
-
-.customer-avatar {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 0.85rem; color: white; flex-shrink: 0;
-}
-
-.badge-status {
-  padding: 0.25rem 0.6rem;
-  border-radius: 50px;
-  font-size: 0.68rem;
-  font-weight: 700;
-}
-
-.badge-vip { background: rgba(255,184,0,0.15); color: var(--gold); border: 1px solid rgba(255,184,0,0.3); }
-.badge-repeat { background: rgba(39,174,96,0.15); color: var(--green); border: 1px solid rgba(39,174,96,0.3); }
-.badge-new { background: rgba(41,128,185,0.15); color: var(--blue); border: 1px solid rgba(41,128,185,0.3); }
-.badge-risk { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.3); }
-
-.customer-action-btn {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text2);
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.2s;
-  margin-right: 0.3rem;
-}
-.customer-action-btn:hover { background: rgba(255,107,0,0.1); border-color: var(--saffron); color: var(--saffron); }
-
-/* ===== SEARCH & FILTER ===== */
-.filter-bar {
-  display: flex;
-  gap: 0.8rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
-}
-
-.search-input {
-  flex: 1;
-  min-width: 200px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  outline: none;
-  transition: all 0.3s;
-}
-.search-input:focus { border-color: var(--saffron); }
-.search-input::placeholder { color: var(--text3); }
-
-.filter-select {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.82rem;
-  outline: none;
-  cursor: pointer;
-}
-
-/* ===== OFFER ENGINE ===== */
-.offer-type-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.offer-type-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.2rem;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-}
-
-.offer-type-card:hover, .offer-type-card.selected {
-  border-color: var(--saffron);
-  background: rgba(255,107,0,0.05);
-}
-
-.offer-type-card.selected::after {
-  content: '✓';
-  position: absolute;
-  top: 0.6rem; right: 0.8rem;
-  color: var(--saffron);
-  font-weight: 700;
-}
-
-.offer-emoji { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
-.offer-type-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
-.offer-type-card p { font-size: 0.72rem; color: var(--text2); }
-.offer-range { font-size: 0.75rem; color: var(--saffron); font-weight: 700; margin-top: 0.4rem; }
-
-/* ===== DISCOUNT CALCULATOR ===== */
-.calc-box {
-  background: var(--surface2);
-  border-radius: 14px;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-}
-
-.calc-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.4rem;
-}
-
-.range-slider {
-  width: 100%;
-  accent-color: var(--saffron);
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.calc-result {
-  background: var(--surface);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-top: 1rem;
-  border: 1px solid rgba(255,107,0,0.2);
-}
-
-.calc-result-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  margin-bottom: 0.4rem;
-  color: var(--text2);
-}
-
-.calc-result-row.highlight {
-  font-weight: 700;
-  color: var(--text);
-  font-size: 0.9rem;
-  border-top: 1px solid var(--border);
-  padding-top: 0.4rem;
-  margin-top: 0.4rem;
-}
-
-.calc-verdict {
-  margin-top: 0.8rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
-.calc-verdict.safe { background: rgba(39,174,96,0.1); color: var(--green); border: 1px solid rgba(39,174,96,0.2); }
-.calc-verdict.warning { background: rgba(255,184,0,0.1); color: var(--gold); border: 1px solid rgba(255,184,0,0.2); }
-.calc-verdict.danger { background: rgba(192,57,43,0.1); color: #e74c3c; border: 1px solid rgba(192,57,43,0.2); }
-
-/* ===== WHATSAPP COMPOSER ===== */
-.wa-phone {
-  background: #111;
-  border-radius: 20px;
-  padding: 1rem;
-  max-width: 300px;
-  margin: 0 auto;
-  border: 2px solid #333;
-}
-
-.wa-header {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 1px solid #222;
-  margin-bottom: 0.8rem;
-}
-
-.wa-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--saffron);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.8rem;
-}
-
-.wa-name { font-size: 0.8rem; font-weight: 600; color: #fff; }
-.wa-status { font-size: 0.65rem; color: #25d366; }
-
-.wa-bubble {
-  background: #1f5c32;
-  border-radius: 12px 12px 0 12px;
-  padding: 0.8rem;
-  font-size: 0.78rem;
-  color: #e0e0e0;
-  line-height: 1.5;
-  white-space: pre-line;
-  word-break: break-word;
-}
-
-.wa-time { text-align: right; font-size: 0.6rem; color: #888; margin-top: 0.3rem; }
-
-.msg-template-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem; }
-
-.msg-template {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.msg-template:hover, .msg-template.selected {
-  border-color: var(--green);
-  background: rgba(37,211,102,0.05);
-}
-
-.msg-template h5 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.2rem; }
-.msg-template p { font-size: 0.72rem; color: var(--text2); }
-
-.target-select-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-
-.target-option {
-  position: relative;
-}
-
-.target-option input[type="checkbox"] { position: absolute; opacity: 0; }
-
-.target-option label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 0.8rem;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 0.78rem;
-  transition: all 0.2s;
-}
-
-.target-option input:checked + label {
-  border-color: var(--green);
-  background: rgba(37,211,102,0.08);
-  color: var(--green);
-}
-
-.send-count-badge {
-  background: var(--saffron);
-  color: white;
-  border-radius: 50px;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
-/* ===== OFFER CREATE FORM ===== */
-.form-field {
-  margin-bottom: 1rem;
-}
-
-.form-field label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.4rem;
-}
-
-.form-field input, .form-field select, .form-field textarea {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.7rem 0.9rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  outline: none;
-  transition: all 0.3s;
-}
-
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,107,0,0.08); }
-
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-.btn-create {
-  background: linear-gradient(135deg, var(--saffron), var(--gold));
-  border: none;
-  border-radius: 12px;
-  padding: 0.8rem 2rem;
-  color: white;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: all 0.3s;
-  display: flex; align-items: center; gap: 0.5rem;
-}
-
-.btn-create:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,107,0,0.4); }
-
-/* ===== PROGRESS BARS ===== */
-.offer-perf-item {
-  margin-bottom: 1rem;
-}
-
-.offer-perf-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  margin-bottom: 0.3rem;
-}
-
-.offer-perf-header span:first-child { color: var(--text); font-weight: 500; }
-.offer-perf-header span:last-child { color: var(--saffron); font-weight: 700; }
-
-.perf-bar {
-  height: 6px;
-  background: var(--surface3);
-  border-radius: 50px;
-  overflow: hidden;
-}
-
-.perf-fill {
-  height: 100%;
-  border-radius: 50px;
-  background: linear-gradient(90deg, var(--saffron), var(--gold));
-  transition: width 0.8s ease;
-}
-
-/* ===== CUSTOMER DETAIL MODAL ===== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(4px);
-  z-index: 500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.modal-overlay.open { display: flex; }
-
-.modal-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2rem;
-  width: 100%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-  animation: modalIn 0.3s ease;
-}
-
-@keyframes modalIn {
-  from { opacity:0; transform: scale(0.9); }
-  to { opacity:1; transform: scale(1); }
-}
-
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-}
-
-.modal-close {
-  background: var(--surface2);
-  border: none;
-  color: var(--text2);
-  width: 32px; height: 32px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
-
-.modal-close:hover { background: var(--red); color: white; }
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.83rem;
-}
-
-.detail-row:last-child { border-bottom: none; }
-.detail-row span:first-child { color: var(--text2); }
-.detail-row span:last-child { color: var(--text); font-weight: 500; }
-
-/* ===== TOAST ===== */
-.toast-container {
-  position: fixed;
-  bottom: 2rem; right: 2rem;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.toast-msg {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.8rem 1.2rem;
-  font-size: 0.83rem;
-  color: var(--text);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  animation: slideIn 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-@keyframes slideIn {
-  from { opacity:0; transform: translateX(20px); }
-  to { opacity:1; transform: translateX(0); }
-}
-
-/* ===== SEGMENT CARDS ===== */
-.segment-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.segment-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.2rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.segment-card:hover { border-color: rgba(255,107,0,0.4); transform: translateY(-2px); }
-
-.segment-card .seg-icon { font-size: 1.8rem; margin-bottom: 0.4rem; display: block; }
-.segment-card .seg-num { font-size: 1.6rem; font-weight: 700; color: var(--text); display: block; }
-.segment-card .seg-label { font-size: 0.72rem; color: var(--text2); margin-top: 0.2rem; }
-.segment-card .seg-action { font-size: 0.68rem; color: var(--saffron); margin-top: 0.5rem; font-weight: 600; }
-
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
-  .sidebar.open { transform: translateX(0); }
-  .main-content { margin-left: 0; padding: 1rem; }
-  .mobile-menu-btn { display: flex !important; }
-  .stat-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.5rem 0.8rem;
-  border-radius: 10px;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.85rem;
-}
+:root{
+  --bg:#0e0b07;--surface:#181410;--card:#221d17;--border:rgba(200,147,10,.15);
+  --gold:#C8930A;--gold2:#F5B800;--orange:#E8520A;--red:#8B0000;--red2:#b71c1c;
+  --green:#2e7d32;--blue:#1565c0;--text:#F0E8D8;--muted:#9A8060;--dim:#5A4030;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.login-wrap{min-height:100vh;background:radial-gradient(ellipse at 40% 40%,#2a0800,#0e0b07);display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:360px;box-shadow:0 40px 80px rgba(0,0,0,.7);}
+.lb-logo{text-align:center;margin-bottom:1.8rem;}
+.lb-logo .icon{font-size:2.2rem;}
+.lb-logo h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--gold2);margin-top:.4rem;}
+.lb-logo p{font-size:.75rem;color:var(--muted);margin-top:.15rem;}
+.lb label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.35rem;}
+.lb input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;margin-bottom:.9rem;}
+.lb input:focus{border-color:var(--gold);}
+.lb-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:11px;padding:.85rem;color:white;font-weight:600;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.lb-btn:hover{transform:translateY(-2px);}
+.lb-err{color:#ef5350;font-size:.78rem;margin-top:.4rem;display:none;}
+#app{display:none;}
+.topbar{background:linear-gradient(135deg,#1a0500,var(--red));padding:.9rem 1.4rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.tb-left h1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold2);}
+.tb-left p{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:.1rem;}
+.live-badge{display:flex;align-items:center;gap:.4rem;background:rgba(46,125,50,.2);border:1px solid rgba(46,125,50,.35);color:#66bb6a;padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:600;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#66bb6a;animation:blink 1.3s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);padding:.3rem .8rem;border-radius:8px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:56px;z-index:99;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:.85rem 1.1rem;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+.tab.active{color:var(--gold2);border-bottom-color:var(--gold2);}
+.tab-content{padding:1.4rem;display:none;}
+.tab-content.active{display:block;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.4rem;}
+@media(min-width:600px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.1rem;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--orange));}
+.sc .sv{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--gold2);}
+.sc .sl{font-size:.7rem;color:var(--muted);margin-top:.2rem;}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.3rem;margin-bottom:1rem;}
+.scard h2{font-size:.92rem;font-weight:600;color:var(--gold2);margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;}
+.scard p.hint{font-size:.75rem;color:var(--muted);margin-bottom:1rem;}
+.fg{margin-bottom:.8rem;}
+.fg label{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-bottom:.3rem;}
+.fi,.fs{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;}
+.fi:focus,.fs:focus{border-color:var(--gold);}
+.fi::placeholder{color:var(--dim);}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.fg3{display:grid;grid-template-columns:auto 1fr 1fr;gap:.8rem;align-items:end;}
+.btn{padding:.75rem 1.4rem;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--orange));color:white;}
+.btn-red{background:linear-gradient(135deg,var(--red),var(--red2));color:white;}
+.btn-green{background:var(--green);color:white;}
+.btn-ghost{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--muted);}
+.btn:hover{opacity:.9;transform:translateY(-1px);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-full{width:100%;justify-content:center;}
+.cust-result{background:rgba(200,147,10,.07);border:2px solid var(--gold);border-radius:14px;padding:1rem;margin:.8rem 0;display:none;}
+.cr-name{font-size:1rem;font-weight:600;color:var(--gold2);}
+.cr-meta{font-size:.75rem;color:var(--muted);margin-top:.2rem;}
+.cr-pts{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--text);}
+table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:580px;}
+th{background:rgba(200,147,10,.15);color:var(--gold2);padding:.65rem .8rem;text-align:left;font-weight:600;}
+td{padding:.7rem .8rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:hover td{background:rgba(255,255,255,.02);}
+.table-wrap{overflow-x:auto;}
+.tier-pill{display:inline-block;padding:.15rem .6rem;border-radius:50px;font-size:.66rem;font-weight:700;}
+.pill-s{background:rgba(200,147,10,.15);color:var(--gold2);}
+.pill-g{background:rgba(200,147,10,.25);color:#FFB800;}
+.pill-v{background:rgba(139,0,0,.2);color:#FF8A80;}
+.menu-item-row{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.mi-emoji-big{font-size:1.6rem;flex-shrink:0;}
+.mi-details{flex:1;min-width:120px;}
+.mi-nm{font-size:.88rem;font-weight:500;color:var(--text);}
+.mi-pr{font-size:.72rem;color:var(--muted);margin-top:.1rem;}
+.mi-toggle{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.mi-disc{width:60px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.3rem .5rem;color:var(--text);font-size:.82rem;outline:none;text-align:center;}
+.toggle-sw{position:relative;width:38px;height:20px;flex-shrink:0;}
+.toggle-sw input{opacity:0;width:0;height:0;}
+.toggle-sw span{position:absolute;inset:0;background:var(--dim);border-radius:10px;transition:background .2s;cursor:pointer;}
+.toggle-sw input:checked+span{background:var(--green);}
+.toggle-sw span::before{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;left:3px;top:3px;transition:transform .2s;}
+.toggle-sw input:checked+span::before{transform:translateX(18px);}
+.del-btn{background:rgba(183,28,28,.15);border:1px solid rgba(183,28,28,.3);color:#ef5350;padding:.3rem .6rem;border-radius:7px;font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1rem;margin-bottom:.8rem;}
+.post-card h4{font-size:.85rem;font-weight:600;color:var(--gold2);margin-bottom:.6rem;}
+.post-text{width:100%;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.75rem;font-size:.78rem;color:var(--text);resize:none;font-family:'DM Sans',sans-serif;line-height:1.5;margin-bottom:.5rem;}
+.post-actions{display:flex;gap:.5rem;}
+.alert-row{display:flex;align-items:center;gap:.9rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:.7rem;}
+.ai-icon{font-size:1.2rem;flex-shrink:0;}
+.ai-text{flex:1;font-size:.8rem;color:var(--text);line-height:1.5;}
+.ai-btn{background:rgba(200,147,10,.15);border:1px solid var(--border);color:var(--gold2);padding:.35rem .8rem;border-radius:7px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.ai-btn:hover{background:rgba(200,147,10,.25);}
+.filter-row{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;}
+.filter-input{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.55rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;}
+.filter-input:focus{border-color:var(--gold);}
+.pag{display:flex;gap:.4rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.pg-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.35rem .75rem;border-radius:7px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.pg-btn.on,.pg-btn:hover{background:var(--gold);border-color:var(--gold);color:white;}
+.bday-banner{background:linear-gradient(135deg,rgba(200,147,10,.15),rgba(232,82,10,.1));border:1px solid rgba(200,147,10,.3);border-radius:13px;padding:1rem;margin-bottom:1rem;display:none;}
+.bday-banner h3{font-size:.88rem;color:var(--gold2);margin-bottom:.4rem;}
+.bday-list{list-style:none;font-size:.8rem;color:var(--muted);}
+.bday-list li{padding:.2rem 0;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.75rem 1.2rem;border-radius:12px;font-size:.82rem;z-index:9999;opacity:0;transition:opacity .3s;box-shadow:0 10px 25px rgba(0,0,0,.5);}
+.toast.show{opacity:1;}
+.ref-verify-row{display:flex;align-items:center;gap:.8rem;background:rgba(46,125,50,.07);border:1px solid rgba(46,125,50,.2);border-radius:10px;padding:.8rem;margin-bottom:.6rem;}
+.ref-verify-row .rv-text{flex:1;font-size:.8rem;color:var(--text);}
+.ref-verify-row .rv-btn{background:var(--green);border:none;border-radius:7px;padding:.35rem .8rem;color:white;font-size:.72rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
-<div id="login-screen">
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
   <div class="login-box">
-    <div class="login-logo">
+    <div class="lb-logo">
       <div class="icon">🪔</div>
-      <h2>Pandit Ji Caterers</h2>
-      <p>Owner Admin Panel</p>
+      <h2>Pandit Ji Admin</h2>
+      <p>Owner Dashboard — Secure Login</p>
     </div>
-    <label class="login-label">Username</label>
-    <input type="text" class="login-input" id="login-user" placeholder="admin" autocomplete="off">
-    <label class="login-label">Password</label>
-    <input type="password" class="login-input" id="login-pass" placeholder="••••••••">
-    <div class="login-error" id="login-error">❌ Wrong username or password</div>
-    <button class="login-btn" onclick="doLogin()">Login to Dashboard</button>
-    <p style="text-align:center;font-size:0.72rem;color:var(--text3);margin-top:1rem;">Demo: admin / pandit123</p>
-  
-  <a class="social-card google" href="index.html" target="_blank">
-      
-      <div class="social-card-text">
-        <h6>back</h6>
-    
-      </div>
-    </a>
-
-</div>
-
-</div>
-</div>
-
-
-
-
-<!-- ===== ADMIN APP ===== -->
-<div id="admin-app">
-
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon">🪔</div>
-      <h3>Pandit Ji<br>Caterers & Sweets</h3>
-      <p>Owner Dashboard</p>
+    <div class="lb">
+      <label>Password</label>
+      <input type="password" id="pw" placeholder="••••••••" onkeyup="if(event.key==='Enter')doLogin()">
+      <div class="lb-err" id="lb-err">❌ Galat password</div>
+      <button class="lb-btn" onclick="doLogin()">🔐 Login Karein</button>
     </div>
-
-    <div class="nav-section">Main</div>
-    <button class="nav-item active" onclick="switchPanel('dashboard', this)">
-      <span class="nav-icon">📊</span> Dashboard
-    </button>
-    <button class="nav-item" onclick="switchPanel('customers', this)">
-      <span class="nav-icon">👥</span> Customers
-    </button>
-    <button class="nav-item" onclick="switchPanel('segments', this)">
-      <span class="nav-icon">🎯</span> Segments
-    </button>
-
-    <div class="nav-section">Marketing</div>
-    <button class="nav-item" onclick="switchPanel('offers', this)">
-      <span class="nav-icon">🎁</span> Offer Engine
-    </button>
-    <button class="nav-item" onclick="switchPanel('whatsapp', this)">
-      <span class="nav-icon">💬</span> WhatsApp Msgs
-    </button>
-
-    <div class="nav-section">Analytics</div>
-    <button class="nav-item" onclick="switchPanel('analytics', this)">
-      <span class="nav-icon">📈</span> Analytics
-    </button>
-    <button class="nav-item" onclick="switchPanel('alerts', this)">
-      <span class="nav-icon">🚨</span> Smart Alerts
-      <span style="margin-left:auto;background:var(--red);color:white;font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:50px;">4</span>
-    </button>
-
-    <div class="sidebar-footer">
-      <div class="owner-pill">
-        <div class="owner-avatar">P</div>
-        <div class="owner-info">
-          <p>Pandit Ji</p>
-          <span>Owner</span>
-        </div>
-        <button class="logout-btn" onclick="doLogout()" title="Logout">⏻</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Main -->
-  <main class="main-content">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:1rem;">
-        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()">☰ Menu</button>
-        <div>
-          <div class="page-title" id="page-title">📊 <span>Dashboard</span></div>
-          <div style="font-size:0.72rem;color:var(--text3);margin-top:0.1rem;" id="page-sub">Aaj ka overview</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <div class="live-badge"><div class="live-dot"></div> Live Data</div>
-        <div style="font-size:0.78rem;color:var(--text2);" id="clock"></div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: DASHBOARD ===== -->
-    <div class="panel active" id="panel-dashboard">
-      <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-num" id="s-total">247</div>
-          <div class="stat-label">Total Customers</div>
-          <div class="stat-delta up">↑ +23 is mahine</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🔁</div>
-          <div class="stat-num">68%</div>
-          <div class="stat-label">Repeat Rate</div>
-          <div class="stat-delta up">↑ +12% last month</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">💰</div>
-          <div class="stat-num">₹2.1L</div>
-          <div class="stat-label">Monthly Revenue</div>
-          <div class="stat-delta up">↑ +₹18K</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">⭐</div>
-          <div class="stat-num">4.7</div>
-          <div class="stat-label">Google Rating</div>
-          <div class="stat-delta up">↑ +34 reviews</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">📱</div>
-          <div class="stat-num">184</div>
-          <div class="stat-label">QR Scans (month)</div>
-          <div class="stat-delta up">↑ +41 this week</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">👥</div>
-          <div class="stat-num">67</div>
-          <div class="stat-label">Active Referrals</div>
-          <div class="stat-delta up">↑ 67 free customers</div>
-        </div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-8">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>📅</span> Weekly Footfall</h3>
-              <button class="btn-sm-action">This Week</button>
-            </div>
-            <div class="chart-bars" id="footfall-chart"></div>
-            <div style="display:flex;gap:1rem;margin-top:0.5rem;">
-              <span style="font-size:0.7rem;color:var(--text3);">● Walk-in</span>
-              <span style="font-size:0.7rem;color:var(--gold);">● Weekend</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="section-card" style="height:100%;">
-            <div class="section-card-head">
-              <h3><span>🎁</span> Offer Performance</h3>
-            </div>
-            <div class="offer-perf-item">
-              <div class="offer-perf-header"><span>20% Welcome</span><span>84%</span></div>
-              <div class="perf-bar"><div class="perf-fill" style="width:84%"></div></div>
-            </div>
-            <div class="offer-perf-item">
-              <div class="offer-perf-header"><span>Birthday 30%</span><span>92%</span></div>
-              <div class="perf-bar"><div class="perf-fill" style="width:92%"></div></div>
-            </div>
-            <div class="offer-perf-item">
-              <div class="offer-perf-header"><span>Buy 2 Get 1</span><span>71%</span></div>
-              <div class="perf-bar"><div class="perf-fill" style="width:71%;background:linear-gradient(90deg,var(--blue),#74b9ff)"></div></div>
-            </div>
-            <div class="offer-perf-item">
-              <div class="offer-perf-header"><span>5th Visit Free</span><span>67%</span></div>
-              <div class="perf-bar"><div class="perf-fill" style="width:67%;background:linear-gradient(90deg,var(--purple),#a29bfe)"></div></div>
-            </div>
-            <div class="offer-perf-item">
-              <div class="offer-perf-header"><span>Weekend Special</span><span>58%</span></div>
-              <div class="perf-bar"><div class="perf-fill" style="width:58%;background:linear-gradient(90deg,var(--green),#55efc4)"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Customers -->
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>👥</span> Recent Customers</h3>
-          <button class="btn-sm-action" onclick="switchPanel('customers', document.querySelector('[onclick*=customers]'))">View All</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="customer-table">
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Visits</th>
-                <th>Last Visit</th>
-                <th>Favourite</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="recent-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: CUSTOMERS ===== -->
-    <div class="panel" id="panel-customers">
-      <div class="filter-bar">
-        <input class="search-input" type="text" placeholder="🔍 Search by name, mobile, favourite..." id="cust-search" oninput="filterCustomers()">
-        <select class="filter-select" id="cust-status-filter" onchange="filterCustomers()">
-          <option value="">All Status</option>
-          <option value="VIP">VIP ⭐</option>
-          <option value="Repeat">Repeat</option>
-          <option value="New">New</option>
-          <option value="At Risk">At Risk</option>
-        </select>
-        <select class="filter-select" id="cust-sort" onchange="filterCustomers()">
-          <option value="recent">Sort: Recent</option>
-          <option value="visits">Sort: Most Visits</option>
-          <option value="spend">Sort: High Spend</option>
-        </select>
-      </div>
-
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>👥</span> All Customers <span id="cust-count-label" style="color:var(--text3);font-size:0.8rem;font-weight:400;margin-left:0.3rem;"></span></h3>
-          <button class="btn-sm-action" onclick="exportCSV()">📥 Export CSV</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="customer-table">
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Mobile</th>
-                <th>Status</th>
-                <th>Visits</th>
-                <th>Points</th>
-                <th>Last Visit</th>
-                <th>Favourite</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="all-customers-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: SEGMENTS ===== -->
-    <div class="panel" id="panel-segments">
-      <div class="segment-grid" id="segment-grid"></div>
-
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>🎯</span> Segment Details</h3>
-          <select class="filter-select" id="seg-filter" onchange="renderSegmentTable()">
-            <option value="all">All Customers</option>
-            <option value="vip">VIP Diamond (500+ pts)</option>
-            <option value="gold">Gold Members (300–499 pts)</option>
-            <option value="repeat">Regular (100–299 pts)</option>
-            <option value="risk">At Risk (15+ days away)</option>
-            <option value="new">New (1 visit only)</option>
-          </select>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="customer-table">
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Points</th>
-                <th>Days Since Visit</th>
-                <th>Favourite</th>
-                <th>Send Offer</th>
-              </tr>
-            </thead>
-            <tbody id="segment-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: OFFERS ===== -->
-    <div class="panel" id="panel-offers">
-      <div class="row g-3">
-        <div class="col-md-7">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>🎁</span> Create New Offer</h3>
-            </div>
-
-            <div class="form-grid mb-3">
-              <div class="form-field">
-                <label>Offer Name</label>
-                <input type="text" id="o-name" placeholder="e.g. Diwali Special">
-              </div>
-              <div class="form-field">
-                <label>Offer Type</label>
-                <select id="o-type">
-                  <option>Percentage Discount</option>
-                  <option>Flat Amount Off</option>
-                  <option>Free Item</option>
-                  <option>Buy X Get Y</option>
-                  <option>Referral Reward</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-grid mb-3">
-              <div class="form-field">
-                <label>Discount Value</label>
-                <input type="number" id="o-value" placeholder="e.g. 15 (for 15%)">
-              </div>
-              <div class="form-field">
-                <label>Valid Till</label>
-                <input type="date" id="o-expiry">
-              </div>
-            </div>
-
-            <div class="form-field">
-              <label>Target Segment</label>
-              <select id="o-target">
-                <option>All Customers</option>
-                <option>VIP Diamond (500+ pts)</option>
-                <option>Gold Members</option>
-                <option>At Risk (15+ days away)</option>
-                <option>New Customers (1 visit)</option>
-                <option>Birthday This Month</option>
-                <option>Regular Repeat</option>
-              </select>
-            </div>
-
-            <div class="form-field">
-              <label>Offer Description</label>
-              <textarea id="o-desc" rows="2" placeholder="Customer ko kya dikhega..."></textarea>
-            </div>
-
-            <button class="btn-create" onclick="createOffer()">
-              ✨ Create & Activate Offer
-            </button>
-          </div>
-
-          <!-- Active Offers List -->
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>✅</span> Active Offers</h3>
-            </div>
-            <div id="active-offers-list"></div>
-          </div>
-        </div>
-
-        <div class="col-md-5">
-          <!-- Discount Calculator -->
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>🧮</span> Discount Calculator</h3>
-            </div>
-            <div class="calc-box">
-              <div class="calc-label">Average Bill (₹): <strong id="c-bill-val" style="color:var(--saffron)">500</strong></div>
-              <input type="range" class="range-slider" min="100" max="5000" step="50" value="500" id="c-bill" oninput="updateCalc()">
-
-              <div class="calc-label">Daily Customers: <strong id="c-cust-val" style="color:var(--gold)">50</strong></div>
-              <input type="range" class="range-slider" min="10" max="300" step="5" value="50" id="c-cust" oninput="updateCalc()">
-
-              <div class="calc-label">Discount: <strong id="c-disc-val" style="color:var(--green)">10%</strong></div>
-              <input type="range" class="range-slider" min="1" max="50" step="1" value="10" id="c-disc" oninput="updateCalc()">
-
-              <div class="calc-result">
-                <div class="calc-result-row"><span>Per Customer Discount</span><span id="cr-per">₹50</span></div>
-                <div class="calc-result-row"><span>Monthly Revenue (Est.)</span><span id="cr-rev">₹7,50,000</span></div>
-                <div class="calc-result-row highlight"><span>Net After Discount</span><span id="cr-net">₹6,75,000</span></div>
-                <div class="calc-verdict safe" id="cr-verdict">✅ Safe Zone! Sustainable discount.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Offer Type Guide -->
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>🎯</span> Offer Type Guide</h3>
-            </div>
-            <div class="offer-type-grid" style="grid-template-columns:1fr 1fr;">
-              <div class="offer-type-card">
-                <span class="offer-emoji">🙏</span>
-                <h4>Welcome</h4>
-                <p>Naye customer ke liye</p>
-                <div class="offer-range">15–20%</div>
-              </div>
-              <div class="offer-type-card">
-                <span class="offer-emoji">🎂</span>
-                <h4>Birthday</h4>
-                <p>Birthday month mein</p>
-                <div class="offer-range">25–30%</div>
-              </div>
-              <div class="offer-type-card">
-                <span class="offer-emoji">👑</span>
-                <h4>5th Visit</h4>
-                <p>Regular reward</p>
-                <div class="offer-range">Free Item</div>
-              </div>
-              <div class="offer-type-card">
-                <span class="offer-emoji">📉</span>
-                <h4>Slow Day</h4>
-                <p>Wednesday boost</p>
-                <div class="offer-range">10–15%</div>
-              </div>
-              <div class="offer-type-card">
-                <span class="offer-emoji">🪔</span>
-                <h4>Festival</h4>
-                <p>Diwali, Holi etc.</p>
-                <div class="offer-range">20–25%</div>
-              </div>
-              <div class="offer-type-card">
-                <span class="offer-emoji">👥</span>
-                <h4>Referral</h4>
-                <p>3 dost laao</p>
-                <div class="offer-range">₹200 Cash</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: WHATSAPP ===== -->
-    <div class="panel" id="panel-whatsapp">
-      <div class="row g-3">
-        <div class="col-md-7">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>💬</span> Message Templates</h3>
-            </div>
-            <div class="msg-template-list" id="msg-templates"></div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>🎯</span> Target Audience</h3>
-              <span class="send-count-badge" id="wa-send-count">0 customers</span>
-            </div>
-            <div class="target-select-grid" id="target-grid"></div>
-            <div style="margin-top:1rem;">
-              <div class="form-field">
-                <label>Custom Message (Optional)</label>
-                <textarea id="wa-custom" rows="3" placeholder="Ya apna khud ka message likhein..."></textarea>
-              </div>
-              <button class="btn-create" onclick="sendWhatsApp()">
-                📤 Send WhatsApp Messages
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-5">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>👁️</span> Message Preview</h3>
-            </div>
-            <div class="wa-phone">
-              <div class="wa-header">
-                <div class="wa-avatar">🪔</div>
-                <div>
-                  <div class="wa-name">Pandit Ji Caterers</div>
-                  <div class="wa-status">✓ Business Account</div>
-                </div>
-              </div>
-              <div class="wa-bubble" id="wa-preview">Template select karein...</div>
-              <div class="wa-time">2:34 PM ✓✓</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>📊</span> Message Stats</h3>
-            </div>
-            <div class="detail-row"><span>Total Sent (Month)</span><span style="color:var(--green)">342</span></div>
-            <div class="detail-row"><span>Delivered</span><span style="color:var(--green)">318 (93%)</span></div>
-            <div class="detail-row"><span>Read</span><span style="color:var(--blue)">241 (76%)</span></div>
-            <div class="detail-row"><span>Customers Returned</span><span style="color:var(--saffron)">89 (37%)</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: ANALYTICS ===== -->
-    <div class="panel" id="panel-analytics">
-      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr))">
-        <div class="stat-card">
-          <div class="stat-icon">📸</div>
-          <div class="stat-num">1,247</div>
-          <div class="stat-label">Instagram Followers</div>
-          <div class="stat-delta up">↑ +312</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">⭐</div>
-          <div class="stat-num">4.8</div>
-          <div class="stat-label">Google Rating</div>
-          <div class="stat-delta up">↑ +47 reviews</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">👍</div>
-          <div class="stat-num">2,180</div>
-          <div class="stat-label">Facebook Likes</div>
-          <div class="stat-delta up">↑ +218</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">💬</div>
-          <div class="stat-num">218</div>
-          <div class="stat-label">WhatsApp Group</div>
-          <div class="stat-delta up">↑ +28</div>
-        </div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>📈</span> Revenue Growth (Last 8 Weeks)</h3>
-        </div>
-        <div class="chart-bars" id="revenue-chart" style="height:120px;"></div>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>🍽️</span> Top Favourite Dishes</h3>
-            </div>
-            <div id="dish-stats"></div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="section-card">
-            <div class="section-card-head">
-              <h3><span>💰</span> Budget Distribution</h3>
-            </div>
-            <div id="budget-stats"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== PANEL: ALERTS ===== -->
-    <div class="panel" id="panel-alerts">
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>🚨</span> Smart Alerts — Abhi Action Lo</h3>
-          <span style="font-size:0.75rem;color:var(--text2);">4 alerts pending</span>
-        </div>
-        <div id="alerts-list"></div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-card-head">
-          <h3><span>🔔</span> Alert Settings</h3>
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="form-field">
-              <label>Inactive Customer Alert (days)</label>
-              <input type="number" value="15" id="alert-days">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-field">
-              <label>Birthday Reminder (days before)</label>
-              <input type="number" value="1" id="alert-bday">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-field">
-              <label>VIP Threshold (points)</label>
-              <input type="number" value="500" id="alert-vip">
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-field">
-              <label>Low Footfall Day Alert</label>
-              <select>
-                <option>Wednesday</option>
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Thursday</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <button class="btn-create" onclick="showToast('✅ Alert settings saved!')">💾 Save Settings</button>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<!-- Customer Detail Modal -->
-<div class="modal-overlay" id="customer-modal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3 id="modal-cust-name" style="font-size:1.1rem;font-weight:700;">Customer Details</h3>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div id="modal-content"></div>
-    <div style="margin-top:1.5rem;display:flex;gap:0.8rem;flex-wrap:wrap;" id="modal-actions"></div>
   </div>
 </div>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// ===== DATA =====
-const CUSTOMERS = [
-  { id:1, name:"Rahul Gupta", mobile:"9876543210", dob:"1990-03-15", status:"VIP", visits:7, points:520, lastVisit:2, spend:4200, fav:"Cold Coffee", source:"Google Maps", budget:"₹500-₹2000", occasions:["Birthday","Pooja"], dishes:["Gulab Jamun","Ladoo"], city:"Vaishali Nagar" },
-  { id:2, name:"Priya Sharma", mobile:"9876512345", dob:"1995-03-08", status:"Repeat", visits:3, points:180, lastVisit:0, spend:1450, fav:"Barfi", source:"Friend", budget:"Under ₹500", occasions:["Festival"], dishes:["Barfi","Halwa"], city:"Malviya Nagar" },
-  { id:3, name:"Amit Verma", mobile:"9812345678", dob:"1988-07-22", status:"At Risk", visits:1, points:50, lastVisit:18, spend:450, fav:"Kachori", source:"Instagram", budget:"Under ₹500", occasions:["Tiffin"], dishes:["Kachori"], city:"Mansarovar" },
-  { id:4, name:"Meera Joshi", mobile:"9856781234", dob:"1992-11-30", status:"New", visits:1, points:30, lastVisit:0, spend:320, fav:"Dal Baati", source:"QR Scan", budget:"Under ₹500", occasions:["Pooja"], dishes:["Dal Baati","Raita"], city:"C-Scheme" },
-  { id:5, name:"Suresh Patel", mobile:"9845678901", dob:"1985-05-10", status:"VIP", visits:12, points:680, lastVisit:5, spend:8400, fav:"Biryani", source:"Friend", budget:"₹2000-₹5000", occasions:["Wedding","Corporate"], dishes:["Biryani","Paneer"], city:"Raja Park" },
-  { id:6, name:"Kavita Singh", mobile:"9834567890", dob:"1993-08-14", status:"Repeat", visits:4, points:210, lastVisit:8, spend:1900, fav:"Ladoo", source:"WhatsApp", budget:"₹500-₹2000", occasions:["Festival","Birthday"], dishes:["Ladoo","Barfi"], city:"Tonk Road" },
-  { id:7, name:"Deepak Agarwal", mobile:"9823456789", dob:"1980-12-25", status:"VIP", visits:9, points:540, lastVisit:3, spend:6200, fav:"Halwa", source:"Google Maps", budget:"₹2000-₹5000", occasions:["Wedding","Pooja"], dishes:["Halwa","Gulab Jamun"], city:"Bapu Nagar" },
-  { id:8, name:"Sunita Yadav", mobile:"9812341234", dob:"1998-02-14", status:"At Risk", visits:2, points:80, lastVisit:20, spend:720, fav:"Raita", source:"Friend", budget:"Under ₹500", occasions:["Birthday"], dishes:["Raita","Barfi"], city:"Jhotwara" },
-  { id:9, name:"Vikram Bhatt", mobile:"9801234567", dob:"1975-06-01", status:"Repeat", visits:5, points:290, lastVisit:10, spend:3100, fav:"Paneer Dish", source:"Already a customer", budget:"₹2000-₹5000", occasions:["Corporate","Festival"], dishes:["Paneer","Biryani"], city:"Bani Park" },
-  { id:10, name:"Rekha Gupta", mobile:"9898989898", dob:"1990-09-18", status:"New", visits:1, points:40, lastVisit:1, spend:280, fav:"Gulab Jamun", source:"QR Scan", budget:"Under ₹500", occasions:["Tiffin"], dishes:["Gulab Jamun"], city:"Sanganer" },
-];
-
-const COLORS = ['#FF6B00','#FFB800','#27ae60','#2980b9','#8e44ad','#c0392b','#16a085','#d35400','#2c3e50','#e74c3c'];
-
-const MSG_TEMPLATES = [
-  { id:'welcome', icon:'🙏', name:'Welcome Message', desc:'Naye customer ke liye', msg:'🙏 Namaskar {name} ji!\n\nPandit Ji Caterers mein aapka swagat hai! 😊\n🎁 Aapka Welcome Discount save ho gaya hai:\nCode: {code} (20% OFF)\n\nAaj counter par yeh code dikhayein.\nAapka intezaar rahega! 🪔' },
-  { id:'inactive', icon:'😴', name:'Win-Back Message', desc:'15+ din se nahi aaye', msg:'😢 {name} ji, aapko yaad kar rahe hain!\n\nKaafi din ho gaye — sirf aapke liye kal tak valid:\n🎁 25% OFF koi bhi order par\nCode: WAPAS25\n\nHum aapka intezaar kar rahe hain! 🍛' },
-  { id:'birthday', icon:'🎂', name:'Birthday Wish', desc:'Birthday ke din bhejo', msg:'🎂 Happy Birthday {name} ji!\n\nAaj ka treat hamare taraf se —\n🎁 Free Mithai Box (250g) + 15% OFF\n\nAaj zaroor aayein — birthday celebrate karein Pandit Ji ke saath! 🎉🪔' },
-  { id:'festival', icon:'🪔', name:'Festival Offer', desc:'Tyohar pe bhejo', msg:'🪔 {name} ji ko Tyohar ki Shubhkamnayein!\n\nIs khushi ke mauqe par:\n🎁 20% OFF + Free Delivery\nCode: TYOHAR20\n\nOrder karein: [link]\n\nMithe tyohar aur meethi mithai! 🍮' },
-  { id:'referral', icon:'👥', name:'Referral Reminder', desc:'Dost laane ke liye', msg:'👥 {name} ji!\n\n3 doston ko refer karein aur paaein:\n✅ 1 dost = ₹50 OFF\n✅ 2 dost = ₹120 OFF\n✅ 3 dost = ₹200 Cash + Free Delivery!\n\nAapka referral code: {code}\nUnhe share karein aur earn karein! 🎉' },
-];
-
-const ACTIVE_OFFERS = [
-  { name:'Welcome 20%', type:'Percentage', value:'20%', target:'New Customers', expiry:'31 Mar 2026', used:47 },
-  { name:'Birthday Special', type:'Free Item + 15%', value:'15% + Free Mithai', target:'Birthday This Month', expiry:'31 Mar 2026', used:12 },
-  { name:'Diwali Offer', type:'Flat', value:'₹100 OFF', target:'All Customers', expiry:'15 Apr 2026', used:89 },
-];
-
-const ALERTS_DATA = [
-  { icon:'😴', type:'red', title:'23 customers 15+ din se nahi aaye', sub:'Win-back offer bhejo — unhe wapas laao', action:'Send Offer', fn:'sendWinBack' },
-  { icon:'🎂', type:'yellow', title:"Priya Sharma ka birthday kal hai", sub:'Free dessert offer bhejo — abhi!', action:'Send Wish', fn:'sendBirthday' },
-  { icon:'⭐', type:'yellow', title:'12 VIP customers hain — exclusive treat do', sub:'Diamond members ko special invite bhejo', action:'View VIPs', fn:'viewVIPs' },
-  { icon:'📉', type:'blue', title:'Wednesday ka footfall sabse kam hai', sub:'Mid-week offer chalao — 34 customers ko target karo', action:'Create Offer', fn:'createMidweek' },
-];
-
-// ===== LOGIN =====
-function doLogin() {
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value.trim();
-  if (u === 'admin' && p === 'pandit123') {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('admin-app').style.display = 'block';
-    initDashboard();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-  }
-}
-
-document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-
-function doLogout() {
-  document.getElementById('admin-app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pass').value = '';
-}
-
-// ===== CLOCK =====
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('hi-IN', {hour:'2-digit',minute:'2-digit'});
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ===== SIDEBAR =====
-function switchPanel(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  const titles = { dashboard:'📊 Dashboard', customers:'👥 Customers', segments:'🎯 Segments', offers:'🎁 Offer Engine', whatsapp:'💬 WhatsApp', analytics:'📈 Analytics', alerts:'🚨 Smart Alerts' };
-  document.getElementById('page-title').innerHTML = titles[name] || name;
-  if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-// ===== INIT =====
-function initDashboard() {
-  renderRecentTable();
-  renderAllCustomers();
-  renderFootfallChart();
-  renderRevenueChart();
-  renderAlerts();
-  renderMsgTemplates();
-  renderActiveOffers();
-  renderSegments();
-  renderDishStats();
-  renderBudgetStats();
-  renderTargetGrid();
-  updateCalc();
-}
-
-// ===== RECENT TABLE =====
-function renderRecentTable() {
-  const tbody = document.getElementById('recent-tbody');
-  const recent = [...CUSTOMERS].sort((a,b) => a.lastVisit - b.lastVisit).slice(0,5);
-  tbody.innerHTML = recent.map(c => customerRow(c, false)).join('');
-}
-
-function customerRow(c, full=true) {
-  const initial = c.name.charAt(0);
-  const colorIdx = c.id % COLORS.length;
-  const dayLabel = c.lastVisit === 0 ? '<span style="color:var(--green)">Aaj</span>' : c.lastVisit === 1 ? 'Kal' : `${c.lastVisit} din pehle`;
-  const badge = statusBadge(c.status);
-  if (full) {
-    return `<tr>
-      <td>
-        <div style="display:flex;align-items:center;gap:0.7rem;">
-          <div class="customer-avatar" style="background:${COLORS[colorIdx]}">${initial}</div>
-          <div>
-            <div style="font-weight:600;">${c.name}</div>
-            <div style="font-size:0.7rem;color:var(--text3)">${c.city}</div>
-          </div>
-        </div>
-      </td>
-      <td style="color:var(--text2);font-size:0.8rem;">${c.mobile}</td>
-      <td>${badge}</td>
-      <td><span style="font-weight:700;color:var(--saffron)">${c.visits}</span></td>
-      <td><span style="font-weight:700;color:var(--gold)">⭐ ${c.points}</span></td>
-      <td style="font-size:0.8rem;">${dayLabel}</td>
-      <td style="font-size:0.78rem;color:var(--text2)">${c.fav}</td>
-      <td>
-        <button class="customer-action-btn" onclick="viewCustomer(${c.id})">👁️ View</button>
-        <button class="customer-action-btn" onclick="sendOfferTo(${c.id})">🎁 Offer</button>
-      </td>
-    </tr>`;
-  } else {
-    return `<tr>
-      <td>
-        <div style="display:flex;align-items:center;gap:0.7rem;">
-          <div class="customer-avatar" style="background:${COLORS[colorIdx]}">${initial}</div>
-          <div>
-            <div style="font-weight:600;">${c.name}</div>
-            <div style="font-size:0.7rem;color:var(--text3)">${c.visits} visits • Fav: ${c.fav}</div>
-          </div>
-        </div>
-      </td>
-      <td>${badge}</td>
-      <td>${c.visits}</td>
-      <td>${dayLabel}</td>
-      <td style="font-size:0.78rem;">${c.fav}</td>
-      <td>
-        <button class="customer-action-btn" onclick="viewCustomer(${c.id})">👁️</button>
-        <button class="customer-action-btn" onclick="sendOfferTo(${c.id})">🎁</button>
-      </td>
-    </tr>`;
-  }
-}
-
-function statusBadge(status) {
-  const map = { 'VIP':'badge-vip', 'Repeat':'badge-repeat', 'New':'badge-new', 'At Risk':'badge-risk' };
-  const icons = { 'VIP':'⭐', 'Repeat':'🔁', 'New':'✨', 'At Risk':'⚠️' };
-  return `<span class="badge-status ${map[status]}">${icons[status]} ${status}</span>`;
-}
-
-// ===== ALL CUSTOMERS =====
-function renderAllCustomers(data) {
-  const list = data || CUSTOMERS;
-  const tbody = document.getElementById('all-customers-tbody');
-  document.getElementById('cust-count-label').textContent = `(${list.length} customers)`;
-  tbody.innerHTML = list.map(c => customerRow(c, true)).join('');
-}
-
-function filterCustomers() {
-  const search = document.getElementById('cust-search').value.toLowerCase();
-  const status = document.getElementById('cust-status-filter').value;
-  const sort = document.getElementById('cust-sort').value;
-
-  let list = CUSTOMERS.filter(c => {
-    const matchSearch = !search || c.name.toLowerCase().includes(search) || c.mobile.includes(search) || c.fav.toLowerCase().includes(search) || c.city.toLowerCase().includes(search);
-    const matchStatus = !status || c.status === status;
-    return matchSearch && matchStatus;
-  });
-
-  if (sort === 'visits') list.sort((a,b) => b.visits - a.visits);
-  else if (sort === 'spend') list.sort((a,b) => b.spend - a.spend);
-  else list.sort((a,b) => a.lastVisit - b.lastVisit);
-
-  renderAllCustomers(list);
-}
-
-// ===== SEGMENTS =====
-function renderSegments() {
-  const vip = CUSTOMERS.filter(c => c.points >= 500).length;
-  const gold = CUSTOMERS.filter(c => c.points >= 300 && c.points < 500).length;
-  const repeat = CUSTOMERS.filter(c => c.points >= 100 && c.points < 300).length;
-  const risk = CUSTOMERS.filter(c => c.lastVisit >= 15).length;
-  const newC = CUSTOMERS.filter(c => c.visits === 1).length;
-
-  const segs = [
-    { icon:'💎', num:vip, label:'VIP Diamond', sub:'500+ points', action:'Exclusive Invite' },
-    { icon:'🥇', num:gold, label:'Gold Members', sub:'300–499 points', action:'Double Points' },
-    { icon:'🔁', num:repeat, label:'Regular Repeat', sub:'100–299 points', action:'Loyalty Reward' },
-    { icon:'⚠️', num:risk, label:'At Risk', sub:'15+ days away', action:'Win-Back Offer' },
-    { icon:'✨', num:newC, label:'New Customers', sub:'1 visit only', action:'Welcome Offer' },
-  ];
-
-  document.getElementById('segment-grid').innerHTML = segs.map(s => `
-    <div class="segment-card" onclick="document.getElementById('seg-filter').value='${s.label.includes('VIP')?'vip':s.label.includes('Gold')?'gold':s.label.includes('At Risk')?'risk':s.label.includes('New')?'new':'repeat'}';renderSegmentTable()">
-      <span class="seg-icon">${s.icon}</span>
-      <span class="seg-num">${s.num}</span>
-      <div class="seg-label">${s.label}</div>
-      <div style="font-size:0.65rem;color:var(--text3)">${s.sub}</div>
-      <div class="seg-action">→ ${s.action}</div>
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-left"><h1>🪔 Pandit Ji Admin</h1><p>Caterers & Sweets — Owner Panel</p></div>
+    <div style="display:flex;align-items:center;gap:.8rem;">
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
     </div>
-  `).join('');
+  </div>
 
-  renderSegmentTable();
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+    <button class="tab" onclick="switchTab('points',this)">⭐ Points</button>
+    <button class="tab" onclick="switchTab('menu',this)">🍽️ Menu & Offers</button>
+    <button class="tab" onclick="switchTab('customers',this)">👥 Customers</button>
+    <button class="tab" onclick="switchTab('alerts',this)">🚨 Alerts</button>
+    <button class="tab" onclick="switchTab('referrals',this)">👥 Referrals</button>
+    <button class="tab" onclick="switchTab('social',this)">📱 Social Posts</button>
+    <button class="tab" onclick="switchTab('export',this)">📥 Export</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="bday-banner" id="bday-banner">
+      <h3>🎂 Aaj ke Birthday Members!</h3>
+      <ul class="bday-list" id="bday-list"></ul>
+    </div>
+    <div class="stat-grid">
+      <div class="sc"><div class="sv" id="st-total">—</div><div class="sl">Total Members</div></div>
+      <div class="sc"><div class="sv" id="st-today">—</div><div class="sl">Aaj Registered</div></div>
+      <div class="sc"><div class="sv" id="st-pts">—</div><div class="sl">Total Points Diye</div></div>
+      <div class="sc"><div class="sv" id="st-refs">—</div><div class="sl">Total Referrals</div></div>
+    </div>
+    <div class="scard">
+      <h2>🏆 Top Members (Points)</h2>
+      <div id="top-members" style="font-size:.85rem;color:var(--muted);">Loading...</div>
+    </div>
+    <div class="scard">
+      <h2>🔗 Quick Links</h2>
+      <div style="font-size:.82rem;line-height:2.5;color:var(--muted);">
+        🛍️ Customer Site: <a href="https://pandit-ji-caterours.vercel.app" target="_blank" style="color:var(--gold2);">pandit-ji-caterours.vercel.app</a><br>
+        🔧 Admin: <a href="https://pandit-ji-admin.vercel.app" target="_blank" style="color:var(--gold2);">pandit-ji-admin.vercel.app</a><br>
+        📱 QR: <a href="https://pandit-ji-caterours.vercel.app/qr.html" target="_blank" style="color:var(--gold2);">pandit-ji-caterours.vercel.app/qr.html</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- POINTS -->
+  <div class="tab-content" id="tab-points">
+    <div class="scard">
+      <h2>🔍 Customer Dhundho</h2>
+      <div class="fg"><label>Phone Number ya Member ID</label><input class="fi" id="srch" placeholder="9876543210 ya PJC12345" oninput="searchCust()"></div>
+      <div class="cust-result" id="cust-result">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div class="cr-name" id="cr-name">—</div>
+            <div class="cr-meta" id="cr-meta">—</div>
+            <div id="cr-tier" style="margin-top:.3rem;"></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="cr-pts" id="cr-pts">0</div>
+            <div style="font-size:.7rem;color:var(--muted);">Points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scard" id="add-pts-card" style="display:none;">
+      <h2>⭐ Points Add Karein</h2>
+      <div class="fg2">
+        <div class="fg"><label>Purchase Amount (₹)</label><input class="fi" id="p-amt" type="number" placeholder="0" oninput="calcPts()"></div>
+        <div class="fg"><label>Points (auto-calculate)</label><input class="fi" id="p-pts" type="number" placeholder="Auto"></div>
+      </div>
+      <div class="fg"><label>Note (optional)</label><input class="fi" id="p-note" placeholder="e.g. Diwali order, Ladoo..."></div>
+      <button class="btn btn-gold btn-full" onclick="addPts()">✅ Points Add Karein</button>
+    </div>
+    <div class="scard" id="redeem-card" style="display:none;">
+      <h2>🎁 Points Redeem Karein</h2>
+      <div class="fg"><label>Points (100 pts = ₹10 discount)</label><input class="fi" id="r-pts" type="number" placeholder="100" oninput="showRedeemVal()"></div>
+      <div id="redeem-val" style="font-size:.82rem;color:var(--muted);margin-bottom:.8rem;"></div>
+      <button class="btn btn-green btn-full" onclick="redeemPts()">🎁 Redeem Karein</button>
+    </div>
+    <div class="scard" id="bonus-card" style="display:none;">
+      <h2>🎯 Bonus Points</h2>
+      <div class="fg2">
+        <div class="fg"><label>Points</label><input class="fi" id="b-pts" type="number" placeholder="50"></div>
+        <div class="fg"><label>Reason</label>
+          <select class="fs" id="b-reason">
+            <option>Birthday bonus</option><option>Festival offer</option>
+            <option>Complaint resolved</option><option>Special occasion</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-full" onclick="addBonus()">🎯 Bonus Add Karein</button>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="tab-content" id="tab-menu">
+    <div class="scard">
+      <h2>➕ Naya Item Add Karein</h2>
+      <p class="hint">Items add karo — discount set karo — customer ko automatically dikhega</p>
+      <div class="fg3">
+        <div class="fg"><label>Emoji</label><input class="fi" id="mi-emoji" placeholder="🍛" maxlength="2" style="width:60px;text-align:center;font-size:1.3rem;"></div>
+        <div class="fg"><label>Item Naam <em style="color:var(--red2);">*</em></label><input class="fi" id="mi-name" placeholder="e.g. Gulab Jamun"></div>
+        <div class="fg"><label>Price (₹) <em style="color:var(--red2);">*</em></label><input class="fi" id="mi-price" type="number" placeholder="150"></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Category</label>
+          <select class="fs" id="mi-cat">
+            <option>Sweet</option><option>Snack</option><option>Main Course</option>
+            <option>Beverage</option><option>Catering</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Discount % (0 = no offer)</label><input class="fi" id="mi-disc" type="number" placeholder="0" min="0" max="70"></div>
+      </div>
+      <div class="fg">
+        <label>Offer Active?</label>
+        <select class="fs" id="mi-active"><option value="true">✅ Yes — Show to customers</option><option value="false">❌ No — Hide offer</option></select>
+      </div>
+      <button class="btn btn-gold btn-full" onclick="addMenuItem()">🍽️ Item Add Karein</button>
+    </div>
+    <div class="scard">
+      <h2>🍽️ Current Menu</h2>
+      <div id="menu-list"><div style="text-align:center;color:var(--muted);font-size:.85rem;padding:2rem;">Loading menu...</div></div>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div class="tab-content" id="tab-customers">
+    <div class="scard">
+      <div class="filter-row">
+        <input class="filter-input" style="flex:1;min-width:160px;" id="f-search" placeholder="🔍 Naam, Phone, ID..." oninput="filterCusts()">
+        <select class="filter-input fs" id="f-tier" onchange="filterCusts()">
+          <option value="">All Tiers</option><option>Silver</option><option>Gold</option><option>VIP Diamond</option>
+        </select>
+        <select class="filter-input fs" id="f-sort" onchange="filterCusts()">
+          <option value="recent">Recent</option><option value="pts">Points ↓</option><option value="visits">Visits ↓</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Naam</th><th>Phone</th><th>Points</th><th>Tier</th><th>Refs</th><th>Join Date</th><th>Action</th></tr></thead>
+          <tbody id="cust-tbody"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pag" id="pag"></div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="tab-content" id="tab-alerts">
+    <div class="scard">
+      <h2>🚨 Smart Alerts — Abhi Action Lo</h2>
+      <div id="alerts-list">Loading...</div>
+    </div>
+    <div class="scard">
+      <h2>📊 Segment Summary</h2>
+      <div id="seg-summary" style="font-size:.82rem;line-height:2.2;color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <!-- REFERRALS VERIFY -->
+  <div class="tab-content" id="tab-referrals">
+    <div class="scard">
+      <h2>👥 Pending Referrals — Verify Karo</h2>
+      <p class="hint">Jab customer shop pe aaye tab hi referral bonus dono ko milega. Fake referral se bachao!</p>
+      <div id="ref-verify-list"><div style="color:var(--muted);font-size:.85rem;padding:1rem;">Loading...</div></div>
+    </div>
+    <div class="scard">
+      <h2>✅ Verified Referrals</h2>
+      <div id="ref-done-list"><div style="color:var(--muted);font-size:.85rem;">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- SOCIAL POSTS -->
+  <div class="tab-content" id="tab-social">
+    <div class="scard" style="margin-bottom:.5rem;"><h2>📱 15 Ready-to-Post Templates</h2><p class="hint">Copy karo ya WhatsApp pe share karo</p></div>
+    <div id="social-posts"></div>
+  </div>
+
+  <!-- EXPORT -->
+  <div class="tab-content" id="tab-export">
+    <div class="scard">
+      <h2>📥 Data Export</h2>
+      <p class="hint">Customer data download karein — Excel mein khulega</p>
+      <button class="btn btn-gold btn-full" onclick="exportAll()" style="margin-bottom:.8rem;">📊 All Customers CSV</button>
+      <button class="btn btn-ghost btn-full" onclick="exportBday()" style="margin-bottom:.8rem;">🎂 Birthday List</button>
+      <button class="btn btn-ghost btn-full" onclick="exportRefs()">👥 Referral Report</button>
+    </div>
+    <div class="scard">
+      <h2>🔐 Password Change</h2>
+      <div class="fg"><label>New Password</label><input class="fi" id="new-pw" type="password" placeholder="Naya password..."></div>
+      <button class="btn btn-ghost" onclick="changePw()">🔐 Password Badlo</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let ADMIN_PW = localStorage.getItem('pjc_admin_pw') || 'panditji2025';
+let allCusts = [], filteredCusts = [], selCust = null;
+let currentPage = 1; const PAGE = 20;
+let menuItems = [];
+
+// LOGIN
+function doLogin() {
+  if (document.getElementById('pw').value === ADMIN_PW) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    sessionStorage.setItem('pjc_admin','1');
+    initApp();
+  } else {
+    document.getElementById('lb-err').style.display = 'block';
+  }
+}
+function doLogout() { sessionStorage.removeItem('pjc_admin'); location.reload(); }
+window.onload = () => {
+  if (sessionStorage.getItem('pjc_admin')) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  }
+  document.getElementById('pw').addEventListener('keyup', e => { if(e.key==='Enter') doLogin(); });
+};
+
+// TABS
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'alerts') loadAlerts();
+  if (name === 'referrals') loadReferrals();
 }
 
-function renderSegmentTable() {
-  const filter = document.getElementById('seg-filter').value;
-  let list = CUSTOMERS;
-  if (filter === 'vip') list = CUSTOMERS.filter(c => c.points >= 500);
-  else if (filter === 'gold') list = CUSTOMERS.filter(c => c.points >= 300 && c.points < 500);
-  else if (filter === 'repeat') list = CUSTOMERS.filter(c => c.points >= 100 && c.points < 300);
-  else if (filter === 'risk') list = CUSTOMERS.filter(c => c.lastVisit >= 15);
-  else if (filter === 'new') list = CUSTOMERS.filter(c => c.visits === 1);
+// INIT
+async function initApp() {
+  await Promise.all([loadDashboard(), loadCusts(), loadMenu(), renderSocialPosts()]);
+}
 
-  document.getElementById('segment-tbody').innerHTML = list.map(c => {
-    const colorIdx = c.id % COLORS.length;
+// DASHBOARD
+async function loadDashboard() {
+  try {
+    const snap = await db.collection('customers').get();
+    const custs = snap.docs.map(d => d.data());
+    const today = new Date(); const todayStr = today.toDateString(); const thisMonth = today.getMonth();
+    document.getElementById('st-total').textContent = custs.length;
+    document.getElementById('st-today').textContent = custs.filter(c => c.joinDate && c.joinDate.toDate && c.joinDate.toDate().toDateString() === todayStr).length;
+    document.getElementById('st-pts').textContent = custs.reduce((s,c) => s+(c.points||0), 0).toLocaleString('en-IN');
+    document.getElementById('st-refs').textContent = custs.reduce((s,c) => s+(c.referralCount||0), 0);
+    // Birthday today
+    const bdayToday = custs.filter(c => { if(!c.birthday) return false; const b = new Date(c.birthday); return b.getDate()===today.getDate()&&b.getMonth()===today.getMonth(); });
+    if (bdayToday.length) {
+      document.getElementById('bday-banner').style.display = 'block';
+      document.getElementById('bday-list').innerHTML = bdayToday.map(c => `<li>🎂 ${c.name} — ${c.phone} (${c.id})</li>`).join('');
+    }
+    // Top 5
+    const top5 = [...custs].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,5);
+    document.getElementById('top-members').innerHTML = top5.map((c,i) =>
+      `<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.82rem;">
+        <span>${['🥇','🥈','🥉','4️⃣','5️⃣'][i]} ${c.name}</span>
+        <span style="font-weight:600;color:var(--gold2);">${(c.points||0).toLocaleString()} pts</span>
+      </div>`).join('');
+  } catch(e) { toast('❌ Dashboard: ' + e.message); }
+}
+
+// LOAD CUSTOMERS
+async function loadCusts() {
+  try {
+    const snap = await db.collection('customers').orderBy('joinDate','desc').get();
+    allCusts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    filteredCusts = [...allCusts];
+    renderTable();
+  } catch(e) {
+    document.getElementById('cust-tbody').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#ef5350;padding:1rem;">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function filterCusts() {
+  const q = document.getElementById('f-search').value.toLowerCase();
+  const tier = document.getElementById('f-tier').value;
+  const sort = document.getElementById('f-sort').value;
+  filteredCusts = allCusts.filter(c => {
+    const mq = !q || c.name?.toLowerCase().includes(q) || c.phone?.includes(q) || c.id?.toLowerCase().includes(q);
+    const mt = !tier || c.tier === tier;
+    return mq && mt;
+  });
+  if (sort === 'pts') filteredCusts.sort((a,b) => (b.points||0)-(a.points||0));
+  else if (sort === 'visits') filteredCusts.sort((a,b) => (b.visits||0)-(a.visits||0));
+  else filteredCusts.sort((a,b) => { try { return b.joinDate.toMillis()-a.joinDate.toMillis(); } catch(e) { return 0; } });
+  currentPage = 1; renderTable();
+}
+
+function renderTable() {
+  const start = (currentPage-1)*PAGE;
+  const page = filteredCusts.slice(start, start+PAGE);
+  const tbody = document.getElementById('cust-tbody');
+  if (!page.length) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Koi result nahi</td></tr>`; document.getElementById('pag').innerHTML=''; return; }
+  tbody.innerHTML = page.map(c => {
+    const ti = getTier(c.points||0);
     return `<tr>
-      <td>
-        <div style="display:flex;align-items:center;gap:0.7rem;">
-          <div class="customer-avatar" style="background:${COLORS[colorIdx]}">${c.name.charAt(0)}</div>
-          <span style="font-weight:600;">${c.name}</span>
-        </div>
-      </td>
-      <td>${statusBadge(c.status)}</td>
-      <td><span style="color:var(--gold);font-weight:700;">⭐ ${c.points}</span></td>
-      <td style="color:${c.lastVisit>=15?'#e74c3c':'var(--text2)'};">${c.lastVisit === 0 ? 'Aaj' : c.lastVisit + ' din'}</td>
-      <td style="font-size:0.78rem;">${c.fav}</td>
-      <td><button class="customer-action-btn" onclick="sendOfferTo(${c.id})">🎁 Send Offer</button></td>
+      <td style="font-size:.7rem;font-weight:600;color:var(--muted);">${c.id}</td>
+      <td>${c.name}</td>
+      <td style="color:var(--muted);">${c.phone}</td>
+      <td style="font-weight:600;color:var(--gold2);">${(c.points||0).toLocaleString()}</td>
+      <td><span class="tier-pill ${ti.cls}">${ti.label}</span></td>
+      <td>${c.referralCount||0}</td>
+      <td style="font-size:.75rem;color:var(--muted);">${c.joinDateStr||'—'}</td>
+      <td><button class="ai-btn" onclick="quickPoints('${c.id}')">+ Points</button></td>
     </tr>`;
   }).join('');
+  const total = Math.ceil(filteredCusts.length/PAGE);
+  if (total > 1) document.getElementById('pag').innerHTML = Array.from({length:total},(_,i)=>`<button class="pg-btn ${i+1===currentPage?'on':''}" onclick="goPage(${i+1})">${i+1}</button>`).join('');
+  else document.getElementById('pag').innerHTML='';
 }
 
-// ===== CHARTS =====
-function renderFootfallChart() {
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const vals = [42,58,31,55,72,95,88];
-  const max = Math.max(...vals);
-  document.getElementById('footfall-chart').innerHTML = days.map((d,i) => `
-    <div class="bar-col">
-      <div class="bar-val">${vals[i]}</div>
-      <div class="bar-fill" style="height:${(vals[i]/max)*80}px;${i===1||i===5||i===6?'background:linear-gradient(to top,var(--gold),#ffe066)':''}"></div>
-      <div class="bar-label">${d}</div>
-    </div>
-  `).join('');
+function goPage(p) { currentPage=p; renderTable(); }
+function getTier(pts) {
+  if (pts>=700) return {label:'💎 VIP',cls:'pill-v'};
+  if (pts>=300) return {label:'🥇 Gold',cls:'pill-g'};
+  return {label:'🥈 Silver',cls:'pill-s'};
 }
 
-function renderRevenueChart() {
-  const weeks = ['W1','W2','W3','W4','W5','W6','W7','W8'];
-  const vals = [62,78,89,100,110,130,150,170];
-  const max = Math.max(...vals);
-  document.getElementById('revenue-chart').innerHTML = weeks.map((w,i) => `
-    <div class="bar-col">
-      <div class="bar-val" style="font-size:0.6rem;">₹${vals[i]}K</div>
-      <div class="bar-fill" style="height:${(vals[i]/max)*100}px;"></div>
-      <div class="bar-label">${w}</div>
-    </div>
-  `).join('');
-}
-
-// ===== DISH & BUDGET STATS =====
-function renderDishStats() {
-  const counts = {};
-  CUSTOMERS.forEach(c => c.dishes.forEach(d => { counts[d] = (counts[d]||0)+1; }));
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const max = sorted[0][1];
-  document.getElementById('dish-stats').innerHTML = sorted.map(([dish, count], i) => `
-    <div class="offer-perf-item">
-      <div class="offer-perf-header"><span>${dish}</span><span>${count} customers</span></div>
-      <div class="perf-bar"><div class="perf-fill" style="width:${(count/max)*100}%;background:${COLORS[i%COLORS.length]}"></div></div>
-    </div>
-  `).join('');
-}
-
-function renderBudgetStats() {
-  const counts = {};
-  CUSTOMERS.forEach(c => { counts[c.budget] = (counts[c.budget]||0)+1; });
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const max = sorted[0][1];
-  document.getElementById('budget-stats').innerHTML = sorted.map(([budget, count], i) => `
-    <div class="offer-perf-item">
-      <div class="offer-perf-header"><span>${budget}</span><span>${count} customers</span></div>
-      <div class="perf-bar"><div class="perf-fill" style="width:${(count/max)*100}%;background:${COLORS[(i+3)%COLORS.length]}"></div></div>
-    </div>
-  `).join('');
-}
-
-// ===== ALERTS =====
-function renderAlerts() {
-  document.getElementById('alerts-list').innerHTML = ALERTS_DATA.map(a => `
-    <div class="alert-card">
-      <div class="alert-icon-box ${a.type}"><span>${a.icon}</span></div>
-      <div class="alert-info">
-        <p>${a.title}</p>
-        <span>${a.sub}</span>
-      </div>
-      <button class="btn-alert" onclick="${a.fn}(this)">${a.action}</button>
-    </div>
-  `).join('');
-}
-
-function sendWinBack(btn) { showToast('📤 23 customers ko Win-Back offer bheja gaya!'); btn.textContent = '✅ Sent'; btn.style.color='var(--green)'; }
-function sendBirthday(btn) { showToast('🎂 Priya Sharma ko Birthday wish bheja!'); btn.textContent = '✅ Sent'; btn.style.color='var(--green)'; }
-function viewVIPs(btn) { switchPanel('segments', document.querySelector('[onclick*=segments]')); document.getElementById('seg-filter').value='vip'; renderSegmentTable(); }
-function createMidweek(btn) { switchPanel('offers', document.querySelector('[onclick*=offers]')); document.getElementById('o-name').value='Wednesday Special'; document.getElementById('o-value').value='12'; }
-
-// ===== CALCULATOR =====
-function updateCalc() {
-  const bill = +document.getElementById('c-bill').value;
-  const cust = +document.getElementById('c-cust').value;
-  const disc = +document.getElementById('c-disc').value;
-
-  document.getElementById('c-bill-val').textContent = '₹' + bill;
-  document.getElementById('c-cust-val').textContent = cust;
-  document.getElementById('c-disc-val').textContent = disc + '%';
-
-  const perCust = Math.round(bill * disc / 100);
-  const monthly = bill * cust * 26;
-  const net = monthly - (perCust * cust * 26);
-
-  document.getElementById('cr-per').textContent = '₹' + perCust;
-  document.getElementById('cr-rev').textContent = '₹' + (monthly/1000).toFixed(1) + 'K';
-  document.getElementById('cr-net').textContent = '₹' + (net/1000).toFixed(1) + 'K';
-
-  const v = document.getElementById('cr-verdict');
-  if (disc <= 15) { v.className = 'calc-verdict safe'; v.textContent = '✅ Safe Zone! Sustainable discount.'; }
-  else if (disc <= 25) { v.className = 'calc-verdict warning'; v.textContent = '⚠️ Caution! High discount — only for special occasions.'; }
-  else { v.className = 'calc-verdict danger'; v.textContent = '❌ Danger Zone! Ye discount profit ko nuksan karega.'; }
-}
-
-// ===== OFFERS =====
-function renderActiveOffers() {
-  document.getElementById('active-offers-list').innerHTML = ACTIVE_OFFERS.map((o,i) => `
-    <div class="alert-card">
-      <div class="alert-icon-box yellow"><span>🎁</span></div>
-      <div class="alert-info">
-        <p>${o.name} — <strong style="color:var(--saffron)">${o.value}</strong></p>
-        <span>${o.target} • Expires: ${o.expiry} • Used: ${o.used} times</span>
-      </div>
-      <button class="btn-alert" onclick="deactivateOffer(${i},this)">Pause</button>
-    </div>
-  `).join('');
-}
-
-function createOffer() {
-  const name = document.getElementById('o-name').value;
-  const value = document.getElementById('o-value').value;
-  const target = document.getElementById('o-target').value;
-  if (!name || !value) { showToast('⚠️ Offer name aur value fill karein!'); return; }
-  showToast(`✅ "${name}" offer activate ho gaya! ${target} ko dikhega.`);
-  ACTIVE_OFFERS.unshift({ name, type:'Custom', value: value+'%', target, expiry:'Ongoing', used:0 });
-  renderActiveOffers();
-  document.getElementById('o-name').value=''; document.getElementById('o-value').value='';
-}
-
-function deactivateOffer(i, btn) { showToast('⏸️ Offer paused!'); btn.textContent='▶️ Resume'; btn.style.color='var(--green)'; }
-
-// ===== WHATSAPP =====
-function renderMsgTemplates() {
-  document.getElementById('msg-templates').innerHTML = MSG_TEMPLATES.map(t => `
-    <div class="msg-template" id="tmpl-${t.id}" onclick="selectTemplate('${t.id}')">
-      <h5>${t.icon} ${t.name}</h5>
-      <p>${t.desc}</p>
-    </div>
-  `).join('');
-}
-
-let selectedTemplate = null;
-
-function selectTemplate(id) {
-  selectedTemplate = MSG_TEMPLATES.find(t => t.id === id);
-  document.querySelectorAll('.msg-template').forEach(el => el.classList.remove('selected'));
-  document.getElementById('tmpl-' + id).classList.add('selected');
-
-  const preview = selectedTemplate.msg
-    .replace('{name}', 'Rahul ji')
-    .replace('{code}', 'PANDIT10');
-  document.getElementById('wa-preview').textContent = preview;
-  updateSendCount();
-}
-
-function renderTargetGrid() {
-  const targets = [
-    { id:'all', label:'👥 All Customers', count: CUSTOMERS.length },
-    { id:'vip', label:'⭐ VIP Only', count: CUSTOMERS.filter(c=>c.points>=500).length },
-    { id:'risk', label:'⚠️ At Risk', count: CUSTOMERS.filter(c=>c.lastVisit>=15).length },
-    { id:'new', label:'✨ New Customers', count: CUSTOMERS.filter(c=>c.visits===1).length },
-    { id:'repeat', label:'🔁 Regular Repeat', count: CUSTOMERS.filter(c=>c.visits>2&&c.visits<8).length },
-    { id:'bday', label:'🎂 Birthday Month', count: 3 },
-  ];
-
-  document.getElementById('target-grid').innerHTML = targets.map(t => `
-    <div class="target-option">
-      <input type="checkbox" id="tgt-${t.id}" onchange="updateSendCount()">
-      <label for="tgt-${t.id}">${t.label} <span style="margin-left:auto;font-size:0.7rem;color:var(--text3)">(${t.count})</span></label>
-    </div>
-  `).join('');
-}
-
-function updateSendCount() {
-  const checked = document.querySelectorAll('#target-grid input:checked');
-  let count = 0;
-  checked.forEach(cb => {
-    const id = cb.id.replace('tgt-','');
-    if (id==='all') count = CUSTOMERS.length;
-    else if (id==='vip') count += CUSTOMERS.filter(c=>c.points>=500).length;
-    else if (id==='risk') count += CUSTOMERS.filter(c=>c.lastVisit>=15).length;
-    else if (id==='new') count += CUSTOMERS.filter(c=>c.visits===1).length;
-    else if (id==='repeat') count += CUSTOMERS.filter(c=>c.visits>2&&c.visits<8).length;
-    else if (id==='bday') count += 3;
-  });
-  document.getElementById('wa-send-count').textContent = count + ' customers';
-}
-
-function sendWhatsApp() {
-  const count = document.getElementById('wa-send-count').textContent;
-  if (count === '0 customers') { showToast('⚠️ Target audience select karein!'); return; }
-  if (!selectedTemplate) { showToast('⚠️ Message template select karein!'); return; }
-  showToast(`✅ ${count} ko "${selectedTemplate.name}" WhatsApp message bheja ja raha hai!`);
-}
-
-// ===== CUSTOMER MODAL =====
-function viewCustomer(id) {
-  const c = CUSTOMERS.find(x => x.id === id);
+function quickPoints(id) {
+  const c = allCusts.find(x => x.id===id);
   if (!c) return;
-  document.getElementById('modal-cust-name').textContent = c.name;
-  document.getElementById('modal-content').innerHTML = `
-    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:var(--surface2);border-radius:12px;">
-      <div class="customer-avatar" style="width:50px;height:50px;font-size:1.2rem;background:${COLORS[c.id%COLORS.length]}">${c.name.charAt(0)}</div>
-      <div>
-        <div style="font-weight:700;">${c.name}</div>
-        <div style="font-size:0.8rem;color:var(--text2)">${c.mobile} • ${c.city}</div>
-        <div style="margin-top:0.3rem">${statusBadge(c.status)}</div>
+  switchTab('points', document.querySelectorAll('.tab')[1]);
+  document.getElementById('srch').value = c.phone;
+  showCustResult(c);
+  toast(`✅ ${c.name} select ho gaya`);
+}
+
+// SEARCH
+let searchTimer;
+function searchCust() {
+  clearTimeout(searchTimer);
+  const q = document.getElementById('srch').value.trim();
+  if (q.length < 3) { hideCustCards(); return; }
+  searchTimer = setTimeout(async () => {
+    try {
+      let c;
+      if (q.startsWith('PJC')) {
+        const d = await db.collection('customers').doc(q).get();
+        if (d.exists) c = {id:d.id,...d.data()};
+      } else {
+        const snap = await db.collection('customers').where('phone','==',q).get();
+        if (!snap.empty) c = {id:snap.docs[0].id,...snap.docs[0].data()};
+      }
+      if (c) showCustResult(c); else { hideCustCards(); toast('❌ Customer nahi mila'); }
+    } catch(e) { toast('Error: '+e.message); }
+  }, 500);
+}
+
+function showCustResult(c) {
+  selCust = c;
+  const ti = getTier(c.points||0);
+  document.getElementById('cr-name').textContent = c.name;
+  document.getElementById('cr-meta').textContent = `📱 ${c.phone} | ID: ${c.id} | Visits: ${c.visits||0}`;
+  document.getElementById('cr-tier').innerHTML = `<span class="tier-pill ${ti.cls}">${ti.label}</span>`;
+  document.getElementById('cr-pts').textContent = (c.points||0).toLocaleString();
+  document.getElementById('cust-result').style.display = 'block';
+  document.getElementById('add-pts-card').style.display = 'block';
+  document.getElementById('redeem-card').style.display = 'block';
+  document.getElementById('bonus-card').style.display = 'block';
+}
+
+function hideCustCards() {
+  ['cust-result','add-pts-card','redeem-card','bonus-card'].forEach(id => document.getElementById(id).style.display='none');
+}
+
+function calcPts() {
+  const amt = parseFloat(document.getElementById('p-amt').value)||0;
+  document.getElementById('p-pts').value = Math.floor(amt/10);
+}
+function showRedeemVal() {
+  const pts = parseInt(document.getElementById('r-pts').value)||0;
+  document.getElementById('redeem-val').textContent = `${pts} points = ₹${Math.floor(pts/10)} discount`;
+}
+
+async function addPts() {
+  if (!selCust) return;
+  const amt = parseFloat(document.getElementById('p-amt').value)||0;
+  const pts = parseInt(document.getElementById('p-pts').value)||0;
+  const note = document.getElementById('p-note').value;
+  if (pts<=0) return toast('❌ Points likhein');
+  try {
+    await db.collection('customers').doc(selCust.id).update({
+      points: firebase.firestore.FieldValue.increment(pts),
+      totalSpend: firebase.firestore.FieldValue.increment(amt),
+      visits: firebase.firestore.FieldValue.increment(1),
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+      lastVisitDays: 0
+    });
+    await db.collection('transactions').add({customerId:selCust.id, customerName:selCust.name, type:'earn', points:pts, amount:amt, note:note||'Purchase', date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)+pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    checkTierUp(selCust.id, newPts);
+    toast(`✅ ${pts} points add! ${selCust.name}: ${newPts} total`);
+    document.getElementById('p-amt').value=''; document.getElementById('p-pts').value=''; document.getElementById('p-note').value='';
+    loadCusts();
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function redeemPts() {
+  if (!selCust) return;
+  const pts = parseInt(document.getElementById('r-pts').value)||0;
+  if (pts<=0) return toast('❌ Points likhein');
+  if (pts>(selCust.points||0)) return toast('❌ Itne points nahi hain!');
+  try {
+    await db.collection('customers').doc(selCust.id).update({points: firebase.firestore.FieldValue.increment(-pts)});
+    await db.collection('transactions').add({customerId:selCust.id, type:'redeem', points:-pts, note:'Redemption', date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)-pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    toast(`✅ ${pts} pts redeem! ₹${Math.floor(pts/10)} discount diya.`);
+    document.getElementById('r-pts').value=''; document.getElementById('redeem-val').textContent='';
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function addBonus() {
+  if (!selCust) return;
+  const pts = parseInt(document.getElementById('b-pts').value)||0;
+  const reason = document.getElementById('b-reason').value;
+  if (pts<=0) return toast('❌ Points likhein');
+  try {
+    await db.collection('customers').doc(selCust.id).update({points: firebase.firestore.FieldValue.increment(pts)});
+    await db.collection('transactions').add({customerId:selCust.id, type:'bonus', points:pts, note:reason, date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)+pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    toast(`✅ ${pts} bonus pts! Reason: ${reason}`);
+    document.getElementById('b-pts').value='';
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function checkTierUp(id, pts) {
+  let tier = 'Silver';
+  if (pts>=700) tier='VIP Diamond';
+  else if (pts>=300) tier='Gold';
+  await db.collection('customers').doc(id).update({tier}).catch(()=>{});
+}
+
+// MENU
+async function loadMenu() {
+  try {
+    const snap = await db.collection('shopConfig').doc('menu').get();
+    menuItems = snap.exists ? (snap.data().items||[]) : [];
+    renderMenu();
+  } catch(e) { menuItems=[]; renderMenu(); }
+}
+
+function renderMenu() {
+  const list = document.getElementById('menu-list');
+  if (!menuItems.length) { list.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:.82rem;padding:1.5rem;">Koi item nahi. Upar se add karein!</div>`; return; }
+  list.innerHTML = menuItems.map((item,i) => `
+    <div class="menu-item-row">
+      <span class="mi-emoji-big">${item.emoji||'🍽️'}</span>
+      <div class="mi-details"><div class="mi-nm">${item.name}</div><div class="mi-pr">₹${item.price} · ${item.category||''}</div></div>
+      <div class="mi-toggle">
+        <input class="mi-disc" type="number" value="${item.discountPct||0}" min="0" max="70" id="disc-${i}">
+        <span style="font-size:.75rem;color:var(--muted);">% OFF</span>
+        <label class="toggle-sw"><input type="checkbox" ${item.discountActive?'checked':''} onchange="toggleItem(${i},this.checked)"><span></span></label>
+        <button class="btn btn-gold" style="padding:.3rem .7rem;font-size:.72rem;" onclick="saveDisc(${i})">Save</button>
+        <button class="del-btn" onclick="delItem(${i})">🗑️</button>
       </div>
-    </div>
-    <div class="detail-row"><span>Date of Birth</span><span>${c.dob}</span></div>
-    <div class="detail-row"><span>Total Visits</span><span style="color:var(--saffron);font-weight:700">${c.visits}</span></div>
-    <div class="detail-row"><span>Loyalty Points</span><span style="color:var(--gold);font-weight:700">⭐ ${c.points}</span></div>
-    <div class="detail-row"><span>Total Spend</span><span style="color:var(--green);font-weight:700">₹${c.spend.toLocaleString()}</span></div>
-    <div class="detail-row"><span>Last Visit</span><span>${c.lastVisit === 0 ? 'Aaj' : c.lastVisit + ' din pehle'}</span></div>
-    <div class="detail-row"><span>Favourite Dish</span><span>${c.fav}</span></div>
-    <div class="detail-row"><span>Budget Range</span><span>${c.budget}</span></div>
-    <div class="detail-row"><span>How Found Us</span><span>${c.source}</span></div>
-    <div class="detail-row"><span>All Favourites</span><span>${c.dishes.join(', ')}</span></div>
-    <div class="detail-row"><span>Occasions</span><span>${c.occasions.join(', ')}</span></div>
-    <div style="margin-top:1rem;padding:0.8rem;background:rgba(255,107,0,0.08);border-radius:10px;border:1px solid rgba(255,107,0,0.2);">
-      <div style="font-size:0.75rem;font-weight:700;color:var(--saffron);margin-bottom:0.4rem;">🤖 AI Recommendation</div>
-      <div style="font-size:0.8rem;color:var(--text2);">${getAIRecommendation(c)}</div>
-    </div>
-  `;
-  document.getElementById('modal-actions').innerHTML = `
-    <button class="btn-create" onclick="sendOfferTo(${c.id});closeModal()">🎁 Send Offer</button>
-    <button class="btn-sm-action" style="padding:0.7rem 1rem;" onclick="closeModal()">Close</button>
-  `;
-  document.getElementById('customer-modal').classList.add('open');
+    </div>`).join('');
 }
 
-function getAIRecommendation(c) {
-  if (c.status === 'VIP') return `${c.name} ek bahut valuable customer hain! Unhe exclusive Diamond Member event invite karein. ${c.fav} unka favourite hai — uska special combo offer dikhao.`;
-  if (c.status === 'At Risk') return `⚠️ ${c.name} ${c.lastVisit} din se nahi aaye! Abhi Win-Back offer bhejo — "${c.fav}" ke saath personalized message bhejo.`;
-  if (c.status === 'New') return `Naye customer hain — Welcome offer confirm karein. ${c.occasions.join(' aur ')} ke liye catering package dikhao. Second visit ensure karo.`;
-  return `Regular customer hain. ${c.fav} unka favourite — seasonal offers batao. ${c.occasions.includes('Birthday') ? 'Birthday offer zaroor bhejo!' : 'Festival offers bhejo.'}`;
+async function addMenuItem() {
+  const name = document.getElementById('mi-name').value.trim();
+  const price = parseFloat(document.getElementById('mi-price').value)||0;
+  if (!name) return toast('❌ Item naam likhein');
+  if (price<=0) return toast('❌ Price likhein');
+  const item = {name, price, emoji:document.getElementById('mi-emoji').value||'🍽️', category:document.getElementById('mi-cat').value, discountPct:parseInt(document.getElementById('mi-disc').value)||0, discountActive:document.getElementById('mi-active').value==='true'};
+  menuItems.push(item);
+  await saveMenu(); renderMenu();
+  ['mi-name','mi-price','mi-emoji','mi-disc'].forEach(id=>document.getElementById(id).value='');
+  toast('✅ Item add ho gaya!');
 }
 
-function closeModal() {
-  document.getElementById('customer-modal').classList.remove('open');
+async function toggleItem(i,val) { menuItems[i].discountActive=val; await saveMenu(); renderMenu(); toast(val?'✅ Offer ON':'⚠️ Offer OFF'); }
+async function saveDisc(i) { menuItems[i].discountPct=parseInt(document.getElementById('disc-'+i).value)||0; await saveMenu(); toast('✅ Discount save!'); }
+async function delItem(i) { if(!confirm('Delete?')) return; menuItems.splice(i,1); await saveMenu(); renderMenu(); toast('🗑️ Item deleted'); }
+async function saveMenu() { await db.collection('shopConfig').doc('menu').set({items:menuItems}).catch(e=>toast('Save error: '+e.message)); }
+
+// ALERTS
+async function loadAlerts() {
+  try {
+    const snap = await db.collection('customers').get();
+    const custs = snap.docs.map(d=>d.data());
+    const today = new Date();
+    const inactive = custs.filter(c=>(c.lastVisitDays||0)>=15);
+    const bdayToday = custs.filter(c=>{if(!c.birthday)return false;const b=new Date(c.birthday);return b.getDate()===today.getDate()&&b.getMonth()===today.getMonth();});
+    const nearVip = custs.filter(c=>(c.points||0)>=600&&(c.points||0)<700);
+    const list = document.getElementById('alerts-list');
+    const items = [];
+    if (inactive.length) items.push({icon:'😴',text:`${inactive.length} customers 15+ din se nahi aaye — Win-back offer bhejo`,action:'WhatsApp Bhejo',fn:()=>{inactive.slice(0,3).forEach(c=>window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent('😢 Aapko yaad kar rahe hain! Aaj aayein — 25% OFF WAPAS25')}`)); toast('📤 WhatsApp khul raha hai!');}});
+    bdayToday.forEach(c=>items.push({icon:'🎂',text:`${c.name} (${c.phone}) ka aaj birthday hai!`,action:'WhatsApp Bhejo',fn:()=>window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent(`🎂 Happy Birthday ${c.name} ji! Aaj aayein — FREE mithai box aapke liye! 🎁🪔`)}`) }));
+    nearVip.forEach(c=>items.push({icon:'🎯',text:`${c.name} ke ${c.points} pts — sirf ${700-(c.points||0)} aur to VIP!`,action:'Offer Bhejo',fn:()=>toast('📤 Offer bheja!')}));
+    if (!items.length) items.push({icon:'✅',text:'Koi urgent alert nahi! Business smooth chal raha hai.',action:null});
+    list.innerHTML = items.map((a,i)=>`
+      <div class="alert-row">
+        <span class="ai-icon">${a.icon}</span>
+        <span class="ai-text">${a.text}</span>
+        ${a.action?`<button class="ai-btn" onclick="window._alertFns[${i}]();">${a.action}</button>`:''}
+      </div>`).join('');
+    window._alertFns = items.map(a=>a.fn||(() => {}));
+
+    // Segment summary
+    document.getElementById('seg-summary').innerHTML = `
+      <div>💎 VIP (700+ pts): ${custs.filter(c=>(c.points||0)>=700).length} members</div>
+      <div>🥇 Gold (300+ pts): ${custs.filter(c=>(c.points||0)>=300&&(c.points||0)<700).length} members</div>
+      <div>🥈 Silver (under 300): ${custs.filter(c=>(c.points||0)<300).length} members</div>
+      <div>😴 Inactive (15+ din): ${inactive.length} members</div>
+      <div>🎂 Birthday this month: ${custs.filter(c=>c.birthday&&new Date(c.birthday).getMonth()===today.getMonth()).length} members</div>
+      <div>👥 Total referrals: ${custs.reduce((s,c)=>s+(c.referralCount||0),0)}</div>`;
+  } catch(e) { toast('❌ Alerts: '+e.message); }
 }
 
-function sendOfferTo(id) {
-  const c = CUSTOMERS.find(x => x.id === id);
-  showToast(`🎁 ${c.name} ko personalized offer bheja ja raha hai!`);
+// REFERRAL VERIFY
+async function loadReferrals() {
+  try {
+    const snap = await db.collection('referrals').orderBy('date','desc').limit(50).get();
+    const refs = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const pending = refs.filter(r=>r.status==='pending');
+    const done = refs.filter(r=>r.status==='verified');
+
+    const plist = document.getElementById('ref-verify-list');
+    if (!pending.length) { plist.innerHTML = '<div style="color:var(--muted);font-size:.85rem;padding:.5rem;">Koi pending referral nahi hai.</div>'; }
+    else {
+      // Get referrer and new customer names
+      plist.innerHTML = pending.map(r=>`
+        <div class="ref-verify-row">
+          <span style="font-size:1.2rem;">👥</span>
+          <div class="rv-text">
+            <strong>${r.referrer}</strong> ne refer kiya → <strong>${r.newCust}</strong><br>
+            <span style="font-size:.72rem;color:var(--muted);">Status: Pending verification</span>
+          </div>
+          <button class="rv-btn" onclick="verifyRef('${r.id}','${r.referrer}')">✅ Verify</button>
+        </div>`).join('');
+    }
+
+    const dlist = document.getElementById('ref-done-list');
+    if (!done.length) { dlist.innerHTML = '<div style="color:var(--muted);font-size:.85rem;">Koi verified referral nahi hai abhi.</div>'; }
+    else dlist.innerHTML = done.slice(0,10).map(r=>`<div style="padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--muted);">✅ ${r.referrer} → ${r.newCust} — ₹${r.bonus} bonus</div>`).join('');
+  } catch(e) { toast('❌ Referrals: '+e.message); }
 }
 
-// ===== TOAST =====
-function showToast(msg) {
-  const container = document.getElementById('toast-container');
-  const toast = document.createElement('div');
-  toast.className = 'toast-msg';
-  toast.textContent = msg;
-  container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+async function verifyRef(refId, referrerId) {
+  try {
+    await db.collection('referrals').doc(refId).update({status:'verified'});
+    toast('✅ Referral verified! Bonus already credited ho gaya tha registration pe.');
+    loadReferrals();
+  } catch(e) { toast('❌ '+e.message); }
 }
 
-// ===== EXPORT =====
-function exportCSV() {
-  const headers = ['Name','Mobile','Status','Visits','Points','Last Visit (days)','Favourite','Budget','City'];
-  const rows = CUSTOMERS.map(c => [c.name, c.mobile, c.status, c.visits, c.points, c.lastVisit, c.fav, c.budget, c.city]);
-  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
+// SOCIAL POSTS
+const POSTS = [
+  {title:"Welcome Offer",emoji:"🎁",text:`🪔 *Pandit Ji Caterers & Sweets* mein aapka swagat!\n\n✨ FREE Loyalty Club join karo:\n🎁 10% off pehli order pe\n⭐ Har purchase pe points\n🎂 Birthday pe FREE mithai\n👥 Dost refer karo = ₹200 cash\n\n📱 pandit-ji-caterours.vercel.app\n\n#PanditJiCaterers #Sweets #Loyalty`},
+  {title:"Birthday Special",emoji:"🎂",text:`🎂 *Birthday wale members — Khaas offer!*\n\nBirthday month mein milti hai FREE Mithai Box! 🎁\n\nAbhi register karo:\n👉 pandit-ji-caterours.vercel.app\n\n#Birthday #FreeSweets #PanditJiCaterers`},
+  {title:"Refer & Earn",emoji:"👥",text:`💰 *Paise kamao ghar baithe!*\n\n✅ Har referral pe ₹200 CASH\n✅ Dost ko milte hain 50 bonus points\n\n🔗 pandit-ji-caterours.vercel.app\n\n#EarnMoney #ReferAndEarn #PanditJiCaterers`},
+  {title:"Points System",emoji:"⭐",text:`⭐ *Loyalty Points se milte hain rewards!*\n\n🥈 50 pts — Join bonus\n🥇 300 pts — Gold Member\n💎 700 pts — VIP Diamond\n\nHar ₹10 pe 1 point!\n\npandit-ji-caterours.vercel.app\n\n#Rewards #PanditJiCaterers`},
+  {title:"Wedding Season",emoji:"💒",text:`💒 *Shaadi ka season aa gaya!*\n\n✅ 500+ successful events\n✅ Pure desi taste\n✅ Affordable packages\n✅ Samay pe delivery\n\n📱 pandit-ji-caterours.vercel.app\n\n#WeddingCatering #Delhi #Catering`},
+  {title:"Diwali Special",emoji:"🪔",text:`🪔 *Diwali Special — Double Points!*\n\nIs Diwali members ko DOUBLE POINTS!\n\n🔗 pandit-ji-caterours.vercel.app\n\n#Diwali #DiwaliSweets #PanditJiCaterers`},
+  {title:"Daily Sweets",emoji:"🍮",text:`🍮 *Roz ki meethi shuruwat!*\n\n✅ Khoya Barfi ✅ Rasgulla\n✅ Gulab Jamun ✅ Kaju Katli\n\nMembers ko discount har baar!\n📱 pandit-ji-caterours.vercel.app\n\n#DesiMithai #Delhi #PanditJiCaterers`},
+  {title:"Gold Member",emoji:"🌟",text:`🌟 *Gold Member bano — Special benefits!*\n\n300 points collect karo aur unlock karo:\n🎁 Exclusive festival offers\n⭐ Priority service\n\n🔗 pandit-ji-caterours.vercel.app\n\n#GoldMember #PanditJiCaterers`},
+  {title:"Eid Special",emoji:"🌙",text:`🌙 *Eid Mubarak!*\n\nIs Eid special meetha:\n🍬 Shahi Tukda 🥛 Phirni 🍮 Sewaiyan\n\nMembers ko 15% off!\n📱 pandit-ji-caterours.vercel.app\n\n#EidMubarak #PanditJiCaterers`},
+  {title:"Corporate",emoji:"🏢",text:`🏢 *Office events ke liye best choice!*\n\n✅ Bulk orders ✅ GST invoice\n✅ On-time delivery ✅ Customized packaging\n\n📱 pandit-ji-caterours.vercel.app\n\n#CorporateCatering #PanditJiCaterers`},
+  {title:"Pooja Special",emoji:"🔱",text:`🔱 *Pooja ke liye shudh mithai!*\n\n✨ Saatvik prasad ✨ Pure ghee sweets\n\nMembers ko 10% off!\n📱 pandit-ji-caterours.vercel.app\n\n#Pooja #Prasad #PanditJiCaterers`},
+  {title:"WhatsApp Status",emoji:"📲",text:`🪔 Pandit Ji Caterers & Sweets\nस्वाद जो दिल को छू जाए\n\n🆓 Free Loyalty Membership\n⭐ Points on every purchase\n🎂 Birthday FREE mithai\n\n👉 pandit-ji-caterours.vercel.app`},
+  {title:"Social Proof",emoji:"❤️",text:`❤️ *1000+ Khush Customers Ka Bharosa!*\n\n"Pandit Ji ki mithai khaaye bina Diwali adhuri lagti hai"\n\n"Wedding mein catering di, sab ne tarif ki"\n\n🌟 pandit-ji-caterours.vercel.app\n\n#CustomerLove #PanditJiCaterers`},
+  {title:"Anniversary",emoji:"💍",text:`💍 *Anniversary pe special treat!*\n\n✨ 5% extra off\n✨ Free flower decoration\n\n📱 pandit-ji-caterours.vercel.app\n\n#Anniversary #Catering #PanditJiCaterers`},
+  {title:"Morning Post",emoji:"🌅",text:`🌅 *Subah ki meethi shuruwat!*\n\nRoz fresh mithai banti hai 🍮\n⏰ Subah 8 baje se khul jaate hain\n\n📱 pandit-ji-caterours.vercel.app\n\n#GoodMorning #Mithai #PanditJiCaterers`}
+];
+
+function renderSocialPosts() {
+  document.getElementById('social-posts').innerHTML = POSTS.map((p,i)=>`
+    <div class="post-card">
+      <h4>${p.emoji} Post ${i+1}: ${p.title}</h4>
+      <textarea class="post-text" id="pt${i}" rows="6" readonly>${p.text}</textarea>
+      <div class="post-actions">
+        <button class="btn btn-ghost" style="padding:.35rem .8rem;font-size:.75rem;" onclick="navigator.clipboard.writeText(POSTS[${i}].text).then(()=>toast('✅ Copy!'))">📋 Copy</button>
+        <button class="btn btn-green" style="padding:.35rem .8rem;font-size:.75rem;" onclick="window.open('https://wa.me/?text='+encodeURIComponent(POSTS[${i}].text))">💬 WhatsApp</button>
+      </div>
+    </div>`).join('');
+}
+
+// EXPORT
+function exportAll() {
+  if (!allCusts.length) return toast('❌ Pehle customers load karein');
+  const h = ['ID','Naam','Phone','Birthday','City','Points','Tier','Referrals','Visits','Join Date'];
+  const r = allCusts.map(c=>[c.id,c.name,c.phone,c.birthday||'',c.city||'',c.points||0,c.tier||'Silver',c.referralCount||0,c.visits||0,c.joinDateStr||'']);
+  dlCSV([h,...r],'panditji_customers.csv');
+  toast(`✅ ${allCusts.length} customers export!`);
+}
+
+function exportBday() {
+  const m = new Date().getMonth();
+  const b = allCusts.filter(c=>c.birthday&&new Date(c.birthday).getMonth()===m);
+  if (!b.length) return toast('❌ Is mahine koi birthday nahi');
+  dlCSV([['Naam','Phone','Birthday','Points'],,...b.map(c=>[c.name,c.phone,c.birthday,c.points||0])],'birthday.csv');
+  toast(`✅ ${b.length} birthday members!`);
+}
+
+function exportRefs() {
+  const r = allCusts.filter(c=>(c.referralCount||0)>0);
+  dlCSV([['Naam','Phone','Referrals','ID'],...r.map(c=>[c.name,c.phone,c.referralCount||0,c.id])],'referrals.csv');
+  toast('✅ Referral report!');
+}
+
+function dlCSV(data, fname) {
+  const csv = '\ufeff' + data.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'panditji_customers.csv';
-  a.click();
-  showToast('📥 Customer data exported!');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = fname; a.click();
 }
 
-// ===== CLOSE MODAL ON OUTSIDE CLICK =====
-document.getElementById('customer-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+function changePw() {
+  const np = document.getElementById('new-pw').value.trim();
+  if (!np || np.length<6) return toast('❌ 6+ characters ka password');
+  localStorage.setItem('pjc_admin_pw', np); ADMIN_PW = np;
+  toast('✅ Password changed!'); document.getElementById('new-pw').value='';
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
 </script>
 </body>
 </html>
