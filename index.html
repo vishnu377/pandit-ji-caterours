@@ -5,6 +5,13 @@
 
 
 
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -12,19 +19,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pandit Ji Caterers & Sweets — Loyalty Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-firebase.initializeApp({
-  apiKey: "AIzaSyC-Z4GGVJfkUFkPjXihi2YyVZAOlxavAAU",
-  authDomain: "panditji-loyalty.firebaseapp.com",
-  projectId: "panditji-loyalty",
-  storageBucket: "panditji-loyalty.firebasestorage.app",
-  messagingSenderId: "625570900306",
-  appId: "1:625570900306:web:d73c2f445a99436774f28b"
-});
-const db = firebase.firestore();
-</script>
+
 <style>
 :root{
   --red:#8B0000;--red2:#b71c1c;--red3:#c0392b;
@@ -680,6 +675,19 @@ function toast(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey: "AIzaSyC-Z4GGVJfkUFkPjXihi2YyVZAOlxavAAU",
+    authDomain: "panditji-loyalty.firebaseapp.com",
+    projectId: "panditji-loyalty",
+    storageBucket: "panditji-loyalty.firebasestorage.app",
+    messagingSenderId: "625570900306",
+    appId: "1:625570900306:web:d73c2f445a99436774f28b"
+  });
+  var db = firebase.firestore();
 </script>
 </body>
 </html>
