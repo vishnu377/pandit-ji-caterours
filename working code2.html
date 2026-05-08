@@ -1,0 +1,803 @@
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Pandit Ji Caterers</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0e0b07;--surface:#181410;--card:#221d17;--border:rgba(200,147,10,.15);
+  --gold:#C8930A;--gold2:#F5B800;--orange:#E8520A;--red:#8B0000;--red2:#b71c1c;
+  --green:#2e7d32;--blue:#1565c0;--text:#F0E8D8;--muted:#9A8060;--dim:#5A4030;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.login-wrap{min-height:100vh;background:radial-gradient(ellipse at 40% 40%,#2a0800,#0e0b07);display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:2.5rem 2rem;width:100%;max-width:360px;box-shadow:0 40px 80px rgba(0,0,0,.7);}
+.lb-logo{text-align:center;margin-bottom:1.8rem;}
+.lb-logo .icon{font-size:2.2rem;}
+.lb-logo h2{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--gold2);margin-top:.4rem;}
+.lb-logo p{font-size:.75rem;color:var(--muted);margin-top:.15rem;}
+.lb label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.35rem;}
+.lb input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;margin-bottom:.9rem;}
+.lb input:focus{border-color:var(--gold);}
+.lb-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:11px;padding:.85rem;color:white;font-weight:600;font-size:.95rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.lb-btn:hover{transform:translateY(-2px);}
+.lb-err{color:#ef5350;font-size:.78rem;margin-top:.4rem;display:none;}
+#app{display:none;}
+.topbar{background:linear-gradient(135deg,#1a0500,var(--red));padding:.9rem 1.4rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.tb-left h1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold2);}
+.tb-left p{font-size:.7rem;color:rgba(255,255,255,.5);margin-top:.1rem;}
+.live-badge{display:flex;align-items:center;gap:.4rem;background:rgba(46,125,50,.2);border:1px solid rgba(46,125,50,.35);color:#66bb6a;padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:600;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#66bb6a;animation:blink 1.3s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);padding:.3rem .8rem;border-radius:8px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:56px;z-index:99;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:.85rem 1.1rem;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+.tab.active{color:var(--gold2);border-bottom-color:var(--gold2);}
+.tab-content{padding:1.4rem;display:none;}
+.tab-content.active{display:block;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.4rem;}
+@media(min-width:600px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.1rem;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--orange));}
+.sc .sv{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--gold2);}
+.sc .sl{font-size:.7rem;color:var(--muted);margin-top:.2rem;}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.3rem;margin-bottom:1rem;}
+.scard h2{font-size:.92rem;font-weight:600;color:var(--gold2);margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;}
+.scard p.hint{font-size:.75rem;color:var(--muted);margin-bottom:1rem;}
+.fg{margin-bottom:.8rem;}
+.fg label{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-bottom:.3rem;}
+.fi,.fs{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;}
+.fi:focus,.fs:focus{border-color:var(--gold);}
+.fi::placeholder{color:var(--dim);}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.fg3{display:grid;grid-template-columns:auto 1fr 1fr;gap:.8rem;align-items:end;}
+.btn{padding:.75rem 1.4rem;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--orange));color:white;}
+.btn-red{background:linear-gradient(135deg,var(--red),var(--red2));color:white;}
+.btn-green{background:var(--green);color:white;}
+.btn-ghost{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--muted);}
+.btn:hover{opacity:.9;transform:translateY(-1px);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.btn-full{width:100%;justify-content:center;}
+.cust-result{background:rgba(200,147,10,.07);border:2px solid var(--gold);border-radius:14px;padding:1rem;margin:.8rem 0;display:none;}
+.cr-name{font-size:1rem;font-weight:600;color:var(--gold2);}
+.cr-meta{font-size:.75rem;color:var(--muted);margin-top:.2rem;}
+.cr-pts{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--text);}
+table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:580px;}
+th{background:rgba(200,147,10,.15);color:var(--gold2);padding:.65rem .8rem;text-align:left;font-weight:600;}
+td{padding:.7rem .8rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:hover td{background:rgba(255,255,255,.02);}
+.table-wrap{overflow-x:auto;}
+.tier-pill{display:inline-block;padding:.15rem .6rem;border-radius:50px;font-size:.66rem;font-weight:700;}
+.pill-s{background:rgba(200,147,10,.15);color:var(--gold2);}
+.pill-g{background:rgba(200,147,10,.25);color:#FFB800;}
+.pill-v{background:rgba(139,0,0,.2);color:#FF8A80;}
+.menu-item-row{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.mi-emoji-big{font-size:1.6rem;flex-shrink:0;}
+.mi-details{flex:1;min-width:120px;}
+.mi-nm{font-size:.88rem;font-weight:500;color:var(--text);}
+.mi-pr{font-size:.72rem;color:var(--muted);margin-top:.1rem;}
+.mi-toggle{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.mi-disc{width:60px;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.3rem .5rem;color:var(--text);font-size:.82rem;outline:none;text-align:center;}
+.toggle-sw{position:relative;width:38px;height:20px;flex-shrink:0;}
+.toggle-sw input{opacity:0;width:0;height:0;}
+.toggle-sw span{position:absolute;inset:0;background:var(--dim);border-radius:10px;transition:background .2s;cursor:pointer;}
+.toggle-sw input:checked+span{background:var(--green);}
+.toggle-sw span::before{content:'';position:absolute;width:14px;height:14px;background:white;border-radius:50%;left:3px;top:3px;transition:transform .2s;}
+.toggle-sw input:checked+span::before{transform:translateX(18px);}
+.del-btn{background:rgba(183,28,28,.15);border:1px solid rgba(183,28,28,.3);color:#ef5350;padding:.3rem .6rem;border-radius:7px;font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1rem;margin-bottom:.8rem;}
+.post-card h4{font-size:.85rem;font-weight:600;color:var(--gold2);margin-bottom:.6rem;}
+.post-text{width:100%;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.75rem;font-size:.78rem;color:var(--text);resize:none;font-family:'DM Sans',sans-serif;line-height:1.5;margin-bottom:.5rem;}
+.post-actions{display:flex;gap:.5rem;}
+.alert-row{display:flex;align-items:center;gap:.9rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:.7rem;}
+.ai-icon{font-size:1.2rem;flex-shrink:0;}
+.ai-text{flex:1;font-size:.8rem;color:var(--text);line-height:1.5;}
+.ai-btn{background:rgba(200,147,10,.15);border:1px solid var(--border);color:var(--gold2);padding:.35rem .8rem;border-radius:7px;font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.ai-btn:hover{background:rgba(200,147,10,.25);}
+.filter-row{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;}
+.filter-input{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.55rem .8rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none;}
+.filter-input:focus{border-color:var(--gold);}
+.pag{display:flex;gap:.4rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;}
+.pg-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.35rem .75rem;border-radius:7px;font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.pg-btn.on,.pg-btn:hover{background:var(--gold);border-color:var(--gold);color:white;}
+.bday-banner{background:linear-gradient(135deg,rgba(200,147,10,.15),rgba(232,82,10,.1));border:1px solid rgba(200,147,10,.3);border-radius:13px;padding:1rem;margin-bottom:1rem;display:none;}
+.bday-banner h3{font-size:.88rem;color:var(--gold2);margin-bottom:.4rem;}
+.bday-list{list-style:none;font-size:.8rem;color:var(--muted);}
+.bday-list li{padding:.2rem 0;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.75rem 1.2rem;border-radius:12px;font-size:.82rem;z-index:9999;opacity:0;transition:opacity .3s;box-shadow:0 10px 25px rgba(0,0,0,.5);}
+.toast.show{opacity:1;}
+.ref-verify-row{display:flex;align-items:center;gap:.8rem;background:rgba(46,125,50,.07);border:1px solid rgba(46,125,50,.2);border-radius:10px;padding:.8rem;margin-bottom:.6rem;}
+.ref-verify-row .rv-text{flex:1;font-size:.8rem;color:var(--text);}
+.ref-verify-row .rv-btn{background:var(--green);border:none;border-radius:7px;padding:.35rem .8rem;color:white;font-size:.72rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <div class="lb-logo">
+      <div class="icon">🪔</div>
+      <h2>Pandit Ji Admin</h2>
+      <p>Owner Dashboard — Secure Login</p>
+    </div>
+    <div class="lb">
+      <label>Password</label>
+      <input type="password" id="pw" placeholder="••••••••" onkeyup="if(event.key==='Enter')doLogin()">
+      <div class="lb-err" id="lb-err">❌ Galat password</div>
+      <button class="lb-btn" onclick="doLogin()">🔐 Login Karein</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-left"><h1>🪔 Pandit Ji Admin</h1><p>Caterers & Sweets — Owner Panel</p></div>
+    <div style="display:flex;align-items:center;gap:.8rem;">
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('dashboard',this)">📊 Dashboard</button>
+    <button class="tab" onclick="switchTab('points',this)">⭐ Points</button>
+    <button class="tab" onclick="switchTab('menu',this)">🍽️ Menu & Offers</button>
+    <button class="tab" onclick="switchTab('customers',this)">👥 Customers</button>
+    <button class="tab" onclick="switchTab('alerts',this)">🚨 Alerts</button>
+    <button class="tab" onclick="switchTab('referrals',this)">👥 Referrals</button>
+    <button class="tab" onclick="switchTab('social',this)">📱 Social Posts</button>
+    <button class="tab" onclick="switchTab('export',this)">📥 Export</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="bday-banner" id="bday-banner">
+      <h3>🎂 Aaj ke Birthday Members!</h3>
+      <ul class="bday-list" id="bday-list"></ul>
+    </div>
+    <div class="stat-grid">
+      <div class="sc"><div class="sv" id="st-total">—</div><div class="sl">Total Members</div></div>
+      <div class="sc"><div class="sv" id="st-today">—</div><div class="sl">Aaj Registered</div></div>
+      <div class="sc"><div class="sv" id="st-pts">—</div><div class="sl">Total Points Diye</div></div>
+      <div class="sc"><div class="sv" id="st-refs">—</div><div class="sl">Total Referrals</div></div>
+    </div>
+    <div class="scard">
+      <h2>🏆 Top Members (Points)</h2>
+      <div id="top-members" style="font-size:.85rem;color:var(--muted);">Loading...</div>
+    </div>
+    <div class="scard">
+      <h2>🔗 Quick Links</h2>
+      <div style="font-size:.82rem;line-height:2.5;color:var(--muted);">
+        🛍️ Customer Site: <a href="https://pandit-ji-caterours.vercel.app" target="_blank" style="color:var(--gold2);">pandit-ji-caterours.vercel.app</a><br>
+        🔧 Admin: <a href="https://pandit-ji-admin.vercel.app" target="_blank" style="color:var(--gold2);">pandit-ji-admin.vercel.app</a><br>
+        📱 QR: <a href="https://pandit-ji-caterours.vercel.app/qr.html" target="_blank" style="color:var(--gold2);">pandit-ji-caterours.vercel.app/qr.html</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- POINTS -->
+  <div class="tab-content" id="tab-points">
+    <div class="scard">
+      <h2>🔍 Customer Dhundho</h2>
+      <div class="fg"><label>Phone Number ya Member ID</label><input class="fi" id="srch" placeholder="9876543210 ya PJC12345" oninput="searchCust()"></div>
+      <div class="cust-result" id="cust-result">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div class="cr-name" id="cr-name">—</div>
+            <div class="cr-meta" id="cr-meta">—</div>
+            <div id="cr-tier" style="margin-top:.3rem;"></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="cr-pts" id="cr-pts">0</div>
+            <div style="font-size:.7rem;color:var(--muted);">Points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scard" id="add-pts-card" style="display:none;">
+      <h2>⭐ Points Add Karein</h2>
+      <div class="fg2">
+        <div class="fg"><label>Purchase Amount (₹)</label><input class="fi" id="p-amt" type="number" placeholder="0" oninput="calcPts()"></div>
+        <div class="fg"><label>Points (auto-calculate)</label><input class="fi" id="p-pts" type="number" placeholder="Auto"></div>
+      </div>
+      <div class="fg"><label>Note (optional)</label><input class="fi" id="p-note" placeholder="e.g. Diwali order, Ladoo..."></div>
+      <button class="btn btn-gold btn-full" onclick="addPts()">✅ Points Add Karein</button>
+    </div>
+    <div class="scard" id="redeem-card" style="display:none;">
+      <h2>🎁 Points Redeem Karein</h2>
+      <div class="fg"><label>Points (100 pts = ₹10 discount)</label><input class="fi" id="r-pts" type="number" placeholder="100" oninput="showRedeemVal()"></div>
+      <div id="redeem-val" style="font-size:.82rem;color:var(--muted);margin-bottom:.8rem;"></div>
+      <button class="btn btn-green btn-full" onclick="redeemPts()">🎁 Redeem Karein</button>
+    </div>
+    <div class="scard" id="bonus-card" style="display:none;">
+      <h2>🎯 Bonus Points</h2>
+      <div class="fg2">
+        <div class="fg"><label>Points</label><input class="fi" id="b-pts" type="number" placeholder="50"></div>
+        <div class="fg"><label>Reason</label>
+          <select class="fs" id="b-reason">
+            <option>Birthday bonus</option><option>Festival offer</option>
+            <option>Complaint resolved</option><option>Special occasion</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-full" onclick="addBonus()">🎯 Bonus Add Karein</button>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="tab-content" id="tab-menu">
+    <div class="scard">
+      <h2>➕ Naya Item Add Karein</h2>
+      <p class="hint">Items add karo — discount set karo — customer ko automatically dikhega</p>
+      <div class="fg3">
+        <div class="fg"><label>Emoji</label><input class="fi" id="mi-emoji" placeholder="🍛" maxlength="2" style="width:60px;text-align:center;font-size:1.3rem;"></div>
+        <div class="fg"><label>Item Naam <em style="color:var(--red2);">*</em></label><input class="fi" id="mi-name" placeholder="e.g. Gulab Jamun"></div>
+        <div class="fg"><label>Price (₹) <em style="color:var(--red2);">*</em></label><input class="fi" id="mi-price" type="number" placeholder="150"></div>
+      </div>
+      <div class="fg2">
+        <div class="fg"><label>Category</label>
+          <select class="fs" id="mi-cat">
+            <option>Sweet</option><option>Snack</option><option>Main Course</option>
+            <option>Beverage</option><option>Catering</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Discount % (0 = no offer)</label><input class="fi" id="mi-disc" type="number" placeholder="0" min="0" max="70"></div>
+      </div>
+      <div class="fg">
+        <label>Offer Active?</label>
+        <select class="fs" id="mi-active"><option value="true">✅ Yes — Show to customers</option><option value="false">❌ No — Hide offer</option></select>
+      </div>
+      <button class="btn btn-gold btn-full" onclick="addMenuItem()">🍽️ Item Add Karein</button>
+    </div>
+    <div class="scard">
+      <h2>🍽️ Current Menu</h2>
+      <div id="menu-list"><div style="text-align:center;color:var(--muted);font-size:.85rem;padding:2rem;">Loading menu...</div></div>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div class="tab-content" id="tab-customers">
+    <div class="scard">
+      <div class="filter-row">
+        <input class="filter-input" style="flex:1;min-width:160px;" id="f-search" placeholder="🔍 Naam, Phone, ID..." oninput="filterCusts()">
+        <select class="filter-input fs" id="f-tier" onchange="filterCusts()">
+          <option value="">All Tiers</option><option>Silver</option><option>Gold</option><option>VIP Diamond</option>
+        </select>
+        <select class="filter-input fs" id="f-sort" onchange="filterCusts()">
+          <option value="recent">Recent</option><option value="pts">Points ↓</option><option value="visits">Visits ↓</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Naam</th><th>Phone</th><th>Points</th><th>Tier</th><th>Refs</th><th>Join Date</th><th>Action</th></tr></thead>
+          <tbody id="cust-tbody"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="pag" id="pag"></div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="tab-content" id="tab-alerts">
+    <div class="scard">
+      <h2>🚨 Smart Alerts — Abhi Action Lo</h2>
+      <div id="alerts-list">Loading...</div>
+    </div>
+    <div class="scard">
+      <h2>📊 Segment Summary</h2>
+      <div id="seg-summary" style="font-size:.82rem;line-height:2.2;color:var(--muted);"></div>
+    </div>
+  </div>
+
+  <!-- REFERRALS VERIFY -->
+  <div class="tab-content" id="tab-referrals">
+    <div class="scard">
+      <h2>👥 Pending Referrals — Verify Karo</h2>
+      <p class="hint">Jab customer shop pe aaye tab hi referral bonus dono ko milega. Fake referral se bachao!</p>
+      <div id="ref-verify-list"><div style="color:var(--muted);font-size:.85rem;padding:1rem;">Loading...</div></div>
+    </div>
+    <div class="scard">
+      <h2>✅ Verified Referrals</h2>
+      <div id="ref-done-list"><div style="color:var(--muted);font-size:.85rem;">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- SOCIAL POSTS -->
+  <div class="tab-content" id="tab-social">
+    <div class="scard" style="margin-bottom:.5rem;"><h2>📱 15 Ready-to-Post Templates</h2><p class="hint">Copy karo ya WhatsApp pe share karo</p></div>
+    <div id="social-posts"></div>
+  </div>
+
+  <!-- EXPORT -->
+  <div class="tab-content" id="tab-export">
+    <div class="scard">
+      <h2>📥 Data Export</h2>
+      <p class="hint">Customer data download karein — Excel mein khulega</p>
+      <button class="btn btn-gold btn-full" onclick="exportAll()" style="margin-bottom:.8rem;">📊 All Customers CSV</button>
+      <button class="btn btn-ghost btn-full" onclick="exportBday()" style="margin-bottom:.8rem;">🎂 Birthday List</button>
+      <button class="btn btn-ghost btn-full" onclick="exportRefs()">👥 Referral Report</button>
+    </div>
+    <div class="scard">
+      <h2>🔐 Password Change</h2>
+      <div class="fg"><label>New Password</label><input class="fi" id="new-pw" type="password" placeholder="Naya password..."></div>
+      <button class="btn btn-ghost" onclick="changePw()">🔐 Password Badlo</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let ADMIN_PW = localStorage.getItem('pjc_admin_pw') || 'panditji2025';
+let allCusts = [], filteredCusts = [], selCust = null;
+let currentPage = 1; const PAGE = 20;
+let menuItems = [];
+
+// LOGIN
+function doLogin() {
+  if (document.getElementById('pw').value === ADMIN_PW) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    sessionStorage.setItem('pjc_admin','1');
+    initApp();
+  } else {
+    document.getElementById('lb-err').style.display = 'block';
+  }
+}
+function doLogout() { sessionStorage.removeItem('pjc_admin'); location.reload(); }
+window.onload = () => {
+  if (sessionStorage.getItem('pjc_admin')) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  }
+  document.getElementById('pw').addEventListener('keyup', e => { if(e.key==='Enter') doLogin(); });
+};
+
+// TABS
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'alerts') loadAlerts();
+  if (name === 'referrals') loadReferrals();
+}
+
+// INIT
+async function initApp() {
+  await Promise.all([loadDashboard(), loadCusts(), loadMenu(), renderSocialPosts()]);
+}
+
+// DASHBOARD
+async function loadDashboard() {
+  try {
+    const snap = await db.collection('customers').get();
+    const custs = snap.docs.map(d => d.data());
+    const today = new Date(); const todayStr = today.toDateString(); const thisMonth = today.getMonth();
+    document.getElementById('st-total').textContent = custs.length;
+    document.getElementById('st-today').textContent = custs.filter(c => c.joinDate && c.joinDate.toDate && c.joinDate.toDate().toDateString() === todayStr).length;
+    document.getElementById('st-pts').textContent = custs.reduce((s,c) => s+(c.points||0), 0).toLocaleString('en-IN');
+    document.getElementById('st-refs').textContent = custs.reduce((s,c) => s+(c.referralCount||0), 0);
+    // Birthday today
+    const bdayToday = custs.filter(c => { if(!c.birthday) return false; const b = new Date(c.birthday); return b.getDate()===today.getDate()&&b.getMonth()===today.getMonth(); });
+    if (bdayToday.length) {
+      document.getElementById('bday-banner').style.display = 'block';
+      document.getElementById('bday-list').innerHTML = bdayToday.map(c => `<li>🎂 ${c.name} — ${c.phone} (${c.id})</li>`).join('');
+    }
+    // Top 5
+    const top5 = [...custs].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,5);
+    document.getElementById('top-members').innerHTML = top5.map((c,i) =>
+      `<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.82rem;">
+        <span>${['🥇','🥈','🥉','4️⃣','5️⃣'][i]} ${c.name}</span>
+        <span style="font-weight:600;color:var(--gold2);">${(c.points||0).toLocaleString()} pts</span>
+      </div>`).join('');
+  } catch(e) { toast('❌ Dashboard: ' + e.message); }
+}
+
+// LOAD CUSTOMERS
+async function loadCusts() {
+  try {
+    const snap = await db.collection('customers').orderBy('joinDate','desc').get();
+    allCusts = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    filteredCusts = [...allCusts];
+    renderTable();
+  } catch(e) {
+    document.getElementById('cust-tbody').innerHTML = `<tr><td colspan="8" style="text-align:center;color:#ef5350;padding:1rem;">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function filterCusts() {
+  const q = document.getElementById('f-search').value.toLowerCase();
+  const tier = document.getElementById('f-tier').value;
+  const sort = document.getElementById('f-sort').value;
+  filteredCusts = allCusts.filter(c => {
+    const mq = !q || c.name?.toLowerCase().includes(q) || c.phone?.includes(q) || c.id?.toLowerCase().includes(q);
+    const mt = !tier || c.tier === tier;
+    return mq && mt;
+  });
+  if (sort === 'pts') filteredCusts.sort((a,b) => (b.points||0)-(a.points||0));
+  else if (sort === 'visits') filteredCusts.sort((a,b) => (b.visits||0)-(a.visits||0));
+  else filteredCusts.sort((a,b) => { try { return b.joinDate.toMillis()-a.joinDate.toMillis(); } catch(e) { return 0; } });
+  currentPage = 1; renderTable();
+}
+
+function renderTable() {
+  const start = (currentPage-1)*PAGE;
+  const page = filteredCusts.slice(start, start+PAGE);
+  const tbody = document.getElementById('cust-tbody');
+  if (!page.length) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted);">Koi result nahi</td></tr>`; document.getElementById('pag').innerHTML=''; return; }
+  tbody.innerHTML = page.map(c => {
+    const ti = getTier(c.points||0);
+    return `<tr>
+      <td style="font-size:.7rem;font-weight:600;color:var(--muted);">${c.id}</td>
+      <td>${c.name}</td>
+      <td style="color:var(--muted);">${c.phone}</td>
+      <td style="font-weight:600;color:var(--gold2);">${(c.points||0).toLocaleString()}</td>
+      <td><span class="tier-pill ${ti.cls}">${ti.label}</span></td>
+      <td>${c.referralCount||0}</td>
+      <td style="font-size:.75rem;color:var(--muted);">${c.joinDateStr||'—'}</td>
+      <td><button class="ai-btn" onclick="quickPoints('${c.id}')">+ Points</button></td>
+    </tr>`;
+  }).join('');
+  const total = Math.ceil(filteredCusts.length/PAGE);
+  if (total > 1) document.getElementById('pag').innerHTML = Array.from({length:total},(_,i)=>`<button class="pg-btn ${i+1===currentPage?'on':''}" onclick="goPage(${i+1})">${i+1}</button>`).join('');
+  else document.getElementById('pag').innerHTML='';
+}
+
+function goPage(p) { currentPage=p; renderTable(); }
+function getTier(pts) {
+  if (pts>=700) return {label:'💎 VIP',cls:'pill-v'};
+  if (pts>=300) return {label:'🥇 Gold',cls:'pill-g'};
+  return {label:'🥈 Silver',cls:'pill-s'};
+}
+
+function quickPoints(id) {
+  const c = allCusts.find(x => x.id===id);
+  if (!c) return;
+  switchTab('points', document.querySelectorAll('.tab')[1]);
+  document.getElementById('srch').value = c.phone;
+  showCustResult(c);
+  toast(`✅ ${c.name} select ho gaya`);
+}
+
+// SEARCH
+let searchTimer;
+function searchCust() {
+  clearTimeout(searchTimer);
+  const q = document.getElementById('srch').value.trim();
+  if (q.length < 3) { hideCustCards(); return; }
+  searchTimer = setTimeout(async () => {
+    try {
+      let c;
+      if (q.startsWith('PJC')) {
+        const d = await db.collection('customers').doc(q).get();
+        if (d.exists) c = {id:d.id,...d.data()};
+      } else {
+        const snap = await db.collection('customers').where('phone','==',q).get();
+        if (!snap.empty) c = {id:snap.docs[0].id,...snap.docs[0].data()};
+      }
+      if (c) showCustResult(c); else { hideCustCards(); toast('❌ Customer nahi mila'); }
+    } catch(e) { toast('Error: '+e.message); }
+  }, 500);
+}
+
+function showCustResult(c) {
+  selCust = c;
+  const ti = getTier(c.points||0);
+  document.getElementById('cr-name').textContent = c.name;
+  document.getElementById('cr-meta').textContent = `📱 ${c.phone} | ID: ${c.id} | Visits: ${c.visits||0}`;
+  document.getElementById('cr-tier').innerHTML = `<span class="tier-pill ${ti.cls}">${ti.label}</span>`;
+  document.getElementById('cr-pts').textContent = (c.points||0).toLocaleString();
+  document.getElementById('cust-result').style.display = 'block';
+  document.getElementById('add-pts-card').style.display = 'block';
+  document.getElementById('redeem-card').style.display = 'block';
+  document.getElementById('bonus-card').style.display = 'block';
+}
+
+function hideCustCards() {
+  ['cust-result','add-pts-card','redeem-card','bonus-card'].forEach(id => document.getElementById(id).style.display='none');
+}
+
+function calcPts() {
+  const amt = parseFloat(document.getElementById('p-amt').value)||0;
+  document.getElementById('p-pts').value = Math.floor(amt/10);
+}
+function showRedeemVal() {
+  const pts = parseInt(document.getElementById('r-pts').value)||0;
+  document.getElementById('redeem-val').textContent = `${pts} points = ₹${Math.floor(pts/10)} discount`;
+}
+
+async function addPts() {
+  if (!selCust) return;
+  const amt = parseFloat(document.getElementById('p-amt').value)||0;
+  const pts = parseInt(document.getElementById('p-pts').value)||0;
+  const note = document.getElementById('p-note').value;
+  if (pts<=0) return toast('❌ Points likhein');
+  try {
+    await db.collection('customers').doc(selCust.id).update({
+      points: firebase.firestore.FieldValue.increment(pts),
+      totalSpend: firebase.firestore.FieldValue.increment(amt),
+      visits: firebase.firestore.FieldValue.increment(1),
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+      lastVisitDays: 0
+    });
+    await db.collection('transactions').add({customerId:selCust.id, customerName:selCust.name, type:'earn', points:pts, amount:amt, note:note||'Purchase', date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)+pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    checkTierUp(selCust.id, newPts);
+    toast(`✅ ${pts} points add! ${selCust.name}: ${newPts} total`);
+    document.getElementById('p-amt').value=''; document.getElementById('p-pts').value=''; document.getElementById('p-note').value='';
+    loadCusts();
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function redeemPts() {
+  if (!selCust) return;
+  const pts = parseInt(document.getElementById('r-pts').value)||0;
+  if (pts<=0) return toast('❌ Points likhein');
+  if (pts>(selCust.points||0)) return toast('❌ Itne points nahi hain!');
+  try {
+    await db.collection('customers').doc(selCust.id).update({points: firebase.firestore.FieldValue.increment(-pts)});
+    await db.collection('transactions').add({customerId:selCust.id, type:'redeem', points:-pts, note:'Redemption', date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)-pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    toast(`✅ ${pts} pts redeem! ₹${Math.floor(pts/10)} discount diya.`);
+    document.getElementById('r-pts').value=''; document.getElementById('redeem-val').textContent='';
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function addBonus() {
+  if (!selCust) return;
+  const pts = parseInt(document.getElementById('b-pts').value)||0;
+  const reason = document.getElementById('b-reason').value;
+  if (pts<=0) return toast('❌ Points likhein');
+  try {
+    await db.collection('customers').doc(selCust.id).update({points: firebase.firestore.FieldValue.increment(pts)});
+    await db.collection('transactions').add({customerId:selCust.id, type:'bonus', points:pts, note:reason, date:firebase.firestore.FieldValue.serverTimestamp()});
+    const newPts = (selCust.points||0)+pts;
+    document.getElementById('cr-pts').textContent = newPts.toLocaleString();
+    selCust.points = newPts;
+    toast(`✅ ${pts} bonus pts! Reason: ${reason}`);
+    document.getElementById('b-pts').value='';
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+async function checkTierUp(id, pts) {
+  let tier = 'Silver';
+  if (pts>=700) tier='VIP Diamond';
+  else if (pts>=300) tier='Gold';
+  await db.collection('customers').doc(id).update({tier}).catch(()=>{});
+}
+
+// MENU
+async function loadMenu() {
+  try {
+    const snap = await db.collection('shopConfig').doc('menu').get();
+    menuItems = snap.exists ? (snap.data().items||[]) : [];
+    renderMenu();
+  } catch(e) { menuItems=[]; renderMenu(); }
+}
+
+function renderMenu() {
+  const list = document.getElementById('menu-list');
+  if (!menuItems.length) { list.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:.82rem;padding:1.5rem;">Koi item nahi. Upar se add karein!</div>`; return; }
+  list.innerHTML = menuItems.map((item,i) => `
+    <div class="menu-item-row">
+      <span class="mi-emoji-big">${item.emoji||'🍽️'}</span>
+      <div class="mi-details"><div class="mi-nm">${item.name}</div><div class="mi-pr">₹${item.price} · ${item.category||''}</div></div>
+      <div class="mi-toggle">
+        <input class="mi-disc" type="number" value="${item.discountPct||0}" min="0" max="70" id="disc-${i}">
+        <span style="font-size:.75rem;color:var(--muted);">% OFF</span>
+        <label class="toggle-sw"><input type="checkbox" ${item.discountActive?'checked':''} onchange="toggleItem(${i},this.checked)"><span></span></label>
+        <button class="btn btn-gold" style="padding:.3rem .7rem;font-size:.72rem;" onclick="saveDisc(${i})">Save</button>
+        <button class="del-btn" onclick="delItem(${i})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addMenuItem() {
+  const name = document.getElementById('mi-name').value.trim();
+  const price = parseFloat(document.getElementById('mi-price').value)||0;
+  if (!name) return toast('❌ Item naam likhein');
+  if (price<=0) return toast('❌ Price likhein');
+  const item = {name, price, emoji:document.getElementById('mi-emoji').value||'🍽️', category:document.getElementById('mi-cat').value, discountPct:parseInt(document.getElementById('mi-disc').value)||0, discountActive:document.getElementById('mi-active').value==='true'};
+  menuItems.push(item);
+  await saveMenu(); renderMenu();
+  ['mi-name','mi-price','mi-emoji','mi-disc'].forEach(id=>document.getElementById(id).value='');
+  toast('✅ Item add ho gaya!');
+}
+
+async function toggleItem(i,val) { menuItems[i].discountActive=val; await saveMenu(); renderMenu(); toast(val?'✅ Offer ON':'⚠️ Offer OFF'); }
+async function saveDisc(i) { menuItems[i].discountPct=parseInt(document.getElementById('disc-'+i).value)||0; await saveMenu(); toast('✅ Discount save!'); }
+async function delItem(i) { if(!confirm('Delete?')) return; menuItems.splice(i,1); await saveMenu(); renderMenu(); toast('🗑️ Item deleted'); }
+async function saveMenu() { await db.collection('shopConfig').doc('menu').set({items:menuItems}).catch(e=>toast('Save error: '+e.message)); }
+
+// ALERTS
+async function loadAlerts() {
+  try {
+    const snap = await db.collection('customers').get();
+    const custs = snap.docs.map(d=>d.data());
+    const today = new Date();
+    const inactive = custs.filter(c=>(c.lastVisitDays||0)>=15);
+    const bdayToday = custs.filter(c=>{if(!c.birthday)return false;const b=new Date(c.birthday);return b.getDate()===today.getDate()&&b.getMonth()===today.getMonth();});
+    const nearVip = custs.filter(c=>(c.points||0)>=600&&(c.points||0)<700);
+    const list = document.getElementById('alerts-list');
+    const items = [];
+    if (inactive.length) items.push({icon:'😴',text:`${inactive.length} customers 15+ din se nahi aaye — Win-back offer bhejo`,action:'WhatsApp Bhejo',fn:()=>{inactive.slice(0,3).forEach(c=>window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent('😢 Aapko yaad kar rahe hain! Aaj aayein — 25% OFF WAPAS25')}`)); toast('📤 WhatsApp khul raha hai!');}});
+    bdayToday.forEach(c=>items.push({icon:'🎂',text:`${c.name} (${c.phone}) ka aaj birthday hai!`,action:'WhatsApp Bhejo',fn:()=>window.open(`https://wa.me/${c.phone}?text=${encodeURIComponent(`🎂 Happy Birthday ${c.name} ji! Aaj aayein — FREE mithai box aapke liye! 🎁🪔`)}`) }));
+    nearVip.forEach(c=>items.push({icon:'🎯',text:`${c.name} ke ${c.points} pts — sirf ${700-(c.points||0)} aur to VIP!`,action:'Offer Bhejo',fn:()=>toast('📤 Offer bheja!')}));
+    if (!items.length) items.push({icon:'✅',text:'Koi urgent alert nahi! Business smooth chal raha hai.',action:null});
+    list.innerHTML = items.map((a,i)=>`
+      <div class="alert-row">
+        <span class="ai-icon">${a.icon}</span>
+        <span class="ai-text">${a.text}</span>
+        ${a.action?`<button class="ai-btn" onclick="window._alertFns[${i}]();">${a.action}</button>`:''}
+      </div>`).join('');
+    window._alertFns = items.map(a=>a.fn||(() => {}));
+
+    // Segment summary
+    document.getElementById('seg-summary').innerHTML = `
+      <div>💎 VIP (700+ pts): ${custs.filter(c=>(c.points||0)>=700).length} members</div>
+      <div>🥇 Gold (300+ pts): ${custs.filter(c=>(c.points||0)>=300&&(c.points||0)<700).length} members</div>
+      <div>🥈 Silver (under 300): ${custs.filter(c=>(c.points||0)<300).length} members</div>
+      <div>😴 Inactive (15+ din): ${inactive.length} members</div>
+      <div>🎂 Birthday this month: ${custs.filter(c=>c.birthday&&new Date(c.birthday).getMonth()===today.getMonth()).length} members</div>
+      <div>👥 Total referrals: ${custs.reduce((s,c)=>s+(c.referralCount||0),0)}</div>`;
+  } catch(e) { toast('❌ Alerts: '+e.message); }
+}
+
+// REFERRAL VERIFY
+async function loadReferrals() {
+  try {
+    const snap = await db.collection('referrals').orderBy('date','desc').limit(50).get();
+    const refs = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const pending = refs.filter(r=>r.status==='pending');
+    const done = refs.filter(r=>r.status==='verified');
+
+    const plist = document.getElementById('ref-verify-list');
+    if (!pending.length) { plist.innerHTML = '<div style="color:var(--muted);font-size:.85rem;padding:.5rem;">Koi pending referral nahi hai.</div>'; }
+    else {
+      // Get referrer and new customer names
+      plist.innerHTML = pending.map(r=>`
+        <div class="ref-verify-row">
+          <span style="font-size:1.2rem;">👥</span>
+          <div class="rv-text">
+            <strong>${r.referrer}</strong> ne refer kiya → <strong>${r.newCust}</strong><br>
+            <span style="font-size:.72rem;color:var(--muted);">Status: Pending verification</span>
+          </div>
+          <button class="rv-btn" onclick="verifyRef('${r.id}','${r.referrer}')">✅ Verify</button>
+        </div>`).join('');
+    }
+
+    const dlist = document.getElementById('ref-done-list');
+    if (!done.length) { dlist.innerHTML = '<div style="color:var(--muted);font-size:.85rem;">Koi verified referral nahi hai abhi.</div>'; }
+    else dlist.innerHTML = done.slice(0,10).map(r=>`<div style="padding:.5rem 0;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--muted);">✅ ${r.referrer} → ${r.newCust} — ₹${r.bonus} bonus</div>`).join('');
+  } catch(e) { toast('❌ Referrals: '+e.message); }
+}
+
+async function verifyRef(refId, referrerId) {
+  try {
+    await db.collection('referrals').doc(refId).update({status:'verified'});
+    toast('✅ Referral verified! Bonus already credited ho gaya tha registration pe.');
+    loadReferrals();
+  } catch(e) { toast('❌ '+e.message); }
+}
+
+// SOCIAL POSTS
+const POSTS = [
+  {title:"Welcome Offer",emoji:"🎁",text:`🪔 *Pandit Ji Caterers & Sweets* mein aapka swagat!\n\n✨ FREE Loyalty Club join karo:\n🎁 10% off pehli order pe\n⭐ Har purchase pe points\n🎂 Birthday pe FREE mithai\n👥 Dost refer karo = ₹200 cash\n\n📱 pandit-ji-caterours.vercel.app\n\n#PanditJiCaterers #Sweets #Loyalty`},
+  {title:"Birthday Special",emoji:"🎂",text:`🎂 *Birthday wale members — Khaas offer!*\n\nBirthday month mein milti hai FREE Mithai Box! 🎁\n\nAbhi register karo:\n👉 pandit-ji-caterours.vercel.app\n\n#Birthday #FreeSweets #PanditJiCaterers`},
+  {title:"Refer & Earn",emoji:"👥",text:`💰 *Paise kamao ghar baithe!*\n\n✅ Har referral pe ₹200 CASH\n✅ Dost ko milte hain 50 bonus points\n\n🔗 pandit-ji-caterours.vercel.app\n\n#EarnMoney #ReferAndEarn #PanditJiCaterers`},
+  {title:"Points System",emoji:"⭐",text:`⭐ *Loyalty Points se milte hain rewards!*\n\n🥈 50 pts — Join bonus\n🥇 300 pts — Gold Member\n💎 700 pts — VIP Diamond\n\nHar ₹10 pe 1 point!\n\npandit-ji-caterours.vercel.app\n\n#Rewards #PanditJiCaterers`},
+  {title:"Wedding Season",emoji:"💒",text:`💒 *Shaadi ka season aa gaya!*\n\n✅ 500+ successful events\n✅ Pure desi taste\n✅ Affordable packages\n✅ Samay pe delivery\n\n📱 pandit-ji-caterours.vercel.app\n\n#WeddingCatering #Delhi #Catering`},
+  {title:"Diwali Special",emoji:"🪔",text:`🪔 *Diwali Special — Double Points!*\n\nIs Diwali members ko DOUBLE POINTS!\n\n🔗 pandit-ji-caterours.vercel.app\n\n#Diwali #DiwaliSweets #PanditJiCaterers`},
+  {title:"Daily Sweets",emoji:"🍮",text:`🍮 *Roz ki meethi shuruwat!*\n\n✅ Khoya Barfi ✅ Rasgulla\n✅ Gulab Jamun ✅ Kaju Katli\n\nMembers ko discount har baar!\n📱 pandit-ji-caterours.vercel.app\n\n#DesiMithai #Delhi #PanditJiCaterers`},
+  {title:"Gold Member",emoji:"🌟",text:`🌟 *Gold Member bano — Special benefits!*\n\n300 points collect karo aur unlock karo:\n🎁 Exclusive festival offers\n⭐ Priority service\n\n🔗 pandit-ji-caterours.vercel.app\n\n#GoldMember #PanditJiCaterers`},
+  {title:"Eid Special",emoji:"🌙",text:`🌙 *Eid Mubarak!*\n\nIs Eid special meetha:\n🍬 Shahi Tukda 🥛 Phirni 🍮 Sewaiyan\n\nMembers ko 15% off!\n📱 pandit-ji-caterours.vercel.app\n\n#EidMubarak #PanditJiCaterers`},
+  {title:"Corporate",emoji:"🏢",text:`🏢 *Office events ke liye best choice!*\n\n✅ Bulk orders ✅ GST invoice\n✅ On-time delivery ✅ Customized packaging\n\n📱 pandit-ji-caterours.vercel.app\n\n#CorporateCatering #PanditJiCaterers`},
+  {title:"Pooja Special",emoji:"🔱",text:`🔱 *Pooja ke liye shudh mithai!*\n\n✨ Saatvik prasad ✨ Pure ghee sweets\n\nMembers ko 10% off!\n📱 pandit-ji-caterours.vercel.app\n\n#Pooja #Prasad #PanditJiCaterers`},
+  {title:"WhatsApp Status",emoji:"📲",text:`🪔 Pandit Ji Caterers & Sweets\nस्वाद जो दिल को छू जाए\n\n🆓 Free Loyalty Membership\n⭐ Points on every purchase\n🎂 Birthday FREE mithai\n\n👉 pandit-ji-caterours.vercel.app`},
+  {title:"Social Proof",emoji:"❤️",text:`❤️ *1000+ Khush Customers Ka Bharosa!*\n\n"Pandit Ji ki mithai khaaye bina Diwali adhuri lagti hai"\n\n"Wedding mein catering di, sab ne tarif ki"\n\n🌟 pandit-ji-caterours.vercel.app\n\n#CustomerLove #PanditJiCaterers`},
+  {title:"Anniversary",emoji:"💍",text:`💍 *Anniversary pe special treat!*\n\n✨ 5% extra off\n✨ Free flower decoration\n\n📱 pandit-ji-caterours.vercel.app\n\n#Anniversary #Catering #PanditJiCaterers`},
+  {title:"Morning Post",emoji:"🌅",text:`🌅 *Subah ki meethi shuruwat!*\n\nRoz fresh mithai banti hai 🍮\n⏰ Subah 8 baje se khul jaate hain\n\n📱 pandit-ji-caterours.vercel.app\n\n#GoodMorning #Mithai #PanditJiCaterers`}
+];
+
+function renderSocialPosts() {
+  document.getElementById('social-posts').innerHTML = POSTS.map((p,i)=>`
+    <div class="post-card">
+      <h4>${p.emoji} Post ${i+1}: ${p.title}</h4>
+      <textarea class="post-text" id="pt${i}" rows="6" readonly>${p.text}</textarea>
+      <div class="post-actions">
+        <button class="btn btn-ghost" style="padding:.35rem .8rem;font-size:.75rem;" onclick="navigator.clipboard.writeText(POSTS[${i}].text).then(()=>toast('✅ Copy!'))">📋 Copy</button>
+        <button class="btn btn-green" style="padding:.35rem .8rem;font-size:.75rem;" onclick="window.open('https://wa.me/?text='+encodeURIComponent(POSTS[${i}].text))">💬 WhatsApp</button>
+      </div>
+    </div>`).join('');
+}
+
+// EXPORT
+function exportAll() {
+  if (!allCusts.length) return toast('❌ Pehle customers load karein');
+  const h = ['ID','Naam','Phone','Birthday','City','Points','Tier','Referrals','Visits','Join Date'];
+  const r = allCusts.map(c=>[c.id,c.name,c.phone,c.birthday||'',c.city||'',c.points||0,c.tier||'Silver',c.referralCount||0,c.visits||0,c.joinDateStr||'']);
+  dlCSV([h,...r],'panditji_customers.csv');
+  toast(`✅ ${allCusts.length} customers export!`);
+}
+
+function exportBday() {
+  const m = new Date().getMonth();
+  const b = allCusts.filter(c=>c.birthday&&new Date(c.birthday).getMonth()===m);
+  if (!b.length) return toast('❌ Is mahine koi birthday nahi');
+  dlCSV([['Naam','Phone','Birthday','Points'],,...b.map(c=>[c.name,c.phone,c.birthday,c.points||0])],'birthday.csv');
+  toast(`✅ ${b.length} birthday members!`);
+}
+
+function exportRefs() {
+  const r = allCusts.filter(c=>(c.referralCount||0)>0);
+  dlCSV([['Naam','Phone','Referrals','ID'],...r.map(c=>[c.name,c.phone,c.referralCount||0,c.id])],'referrals.csv');
+  toast('✅ Referral report!');
+}
+
+function dlCSV(data, fname) {
+  const csv = '\ufeff' + data.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = fname; a.click();
+}
+
+function changePw() {
+  const np = document.getElementById('new-pw').value.trim();
+  if (!np || np.length<6) return toast('❌ 6+ characters ka password');
+  localStorage.setItem('pjc_admin_pw', np); ADMIN_PW = np;
+  toast('✅ Password changed!'); document.getElementById('new-pw').value='';
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3500);
+}
+</script>
+
+
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-Z4GGVJfkUFkPjXihi2YyVZAOlxavAAU",
+    authDomain: "panditji-loyalty.firebaseapp.com",
+    projectId: "panditji-loyalty",
+    storageBucket: "panditji-loyalty.firebasestorage.app",
+    messagingSenderId: "625570900306",
+    appId: "1:625570900306:web:d73c2f445a99436774f28b"
+  };
+
+  // Initialize Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pandit Ji Caterers & Sweets — Loyalty Club</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --red:#8B0000;--red2:#b71c1c;--red3:#c0392b;
+  --gold:#C8930A;--gold2:#F5B800;--orange:#E8520A;
+  --cream:#FFF9F2;--cream2:#FFF3E0;--brown:#3E1A00;
+  --mid:#7A4520;--light:#B07850;--green:#2E7D32;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--brown);min-height:100vh;max-width:480px;margin:0 auto;}
+.screen{display:none;}
+.screen.active{display:flex;flex-direction:column;min-height:100vh;animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.welcome-bg{background:linear-gradient(160deg,#2a0000 0%,var(--red) 45%,var(--red3) 100%);flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.welcome-bg::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(200,147,10,.04) 0px,rgba(200,147,10,.04) 1px,transparent 1px,transparent 20px);}
+.w-diya{font-size:3rem;animation:float 3s ease-in-out infinite;position:relative;z-index:1;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.w-name{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:white;line-height:1.1;margin:1rem 0 .3rem;position:relative;z-index:1;}
+.w-name em{color:var(--gold2);font-style:normal;}
+.w-tag{font-size:.88rem;color:rgba(255,255,255,.7);letter-spacing:1.5px;position:relative;z-index:1;}
+.w-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(200,147,10,.18);border:1px solid rgba(200,147,10,.35);color:var(--gold2);padding:.45rem 1.1rem;border-radius:50px;font-size:.8rem;font-weight:600;margin:1.4rem 0 1rem;position:relative;z-index:1;}
+.w-chips{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.8rem;position:relative;z-index:1;}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.88);padding:.3rem .85rem;border-radius:50px;font-size:.75rem;}
+.btn-main{background:linear-gradient(135deg,var(--gold),var(--orange));color:white;border:none;padding:.95rem 2.4rem;border-radius:50px;font-size:1rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 6px 24px rgba(200,147,10,.45);transition:all .25s;position:relative;z-index:1;}
+.btn-main:hover{transform:translateY(-2px);}
+.w-member{color:rgba(255,255,255,.55);font-size:.82rem;margin-top:.9rem;cursor:pointer;text-decoration:underline;position:relative;z-index:1;}
+
+/* FORM */
+.form-header{background:linear-gradient(135deg,var(--red),var(--red3));padding:1.3rem 1.5rem 2.2rem;color:white;position:relative;overflow:hidden;}
+.form-header::after{content:'';position:absolute;bottom:-20px;left:0;right:0;height:40px;background:var(--cream);border-radius:50% 50% 0 0/100% 100% 0 0;}
+.back{background:none;border:none;color:rgba(255,255,255,.75);font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.3rem;margin-bottom:.5rem;font-family:'DM Sans',sans-serif;}
+.fh-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;}
+.fh-sub{font-size:.78rem;opacity:.75;margin-top:.2rem;}
+.form-body{padding:2rem 1.5rem 1.5rem;flex:1;}
+.fsec{font-size:.7rem;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:1.5px;margin:1.4rem 0 .7rem;display:flex;align-items:center;gap:.5rem;}
+.fsec::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--orange),transparent);opacity:.3;}
+.fg{margin-bottom:.9rem;}
+.fg label{display:block;font-size:.78rem;font-weight:500;color:var(--mid);margin-bottom:.3rem;}
+.fg label em{color:var(--red3);}
+.fc{width:100%;padding:.75rem .95rem;border:1.5px solid #E8D0BB;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--brown);background:white;outline:none;transition:border-color .2s;}
+.fc:focus{border-color:var(--gold);}
+.fc::placeholder{color:#C0A080;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+.dish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-top:.4rem;}
+.dopt{position:relative;}
+.dopt input{position:absolute;opacity:0;width:0;height:0;}
+.dopt label{display:flex;flex-direction:column;align-items:center;padding:.6rem .3rem;border:1.5px solid #E8D0BB;border-radius:10px;cursor:pointer;transition:all .25s;background:white;font-size:.68rem;text-align:center;}
+.dopt label .de{font-size:1.4rem;margin-bottom:.2rem;}
+.dopt input:checked+label{border-color:var(--gold);background:rgba(200,147,10,.07);color:var(--gold);}
+.occ-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.4rem;}
+.oopt{position:relative;}
+.oopt input{position:absolute;opacity:0;}
+.oopt label{display:flex;align-items:center;gap:.4rem;padding:.65rem;border:1.5px solid #E8D0BB;border-radius:10px;cursor:pointer;font-size:.78rem;transition:all .25s;background:white;margin:0;}
+.oopt input:checked+label{border-color:var(--green);background:rgba(46,125,50,.06);color:var(--green);}
+.stars{display:flex;gap:.4rem;margin-top:.3rem;}
+.star{background:none;border:none;font-size:1.9rem;cursor:pointer;color:#DDD;transition:color .15s;line-height:1;}
+.star.on{color:var(--gold2);}
+.btn-sub{width:100%;background:linear-gradient(135deg,var(--red),var(--red3));color:white;border:none;padding:.95rem;border-radius:14px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:1.4rem;font-family:'DM Sans',sans-serif;transition:all .25s;box-shadow:0 5px 18px rgba(139,0,0,.28);}
+.btn-sub:hover{transform:translateY(-2px);}
+.btn-sub:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+
+/* SOCIAL */
+.sg-bg{background:linear-gradient(160deg,#0d0d1a,#141e30,#0d1a0d);flex:1;padding:2.5rem 1.5rem;}
+.sg-title{font-family:'Playfair Display',serif;font-size:1.7rem;color:white;text-align:center;margin-bottom:.4rem;}
+.sg-sub{color:rgba(255,255,255,.5);font-size:.85rem;text-align:center;margin-bottom:1.8rem;}
+.sg-lock{font-size:3rem;text-align:center;margin-bottom:.6rem;}
+.task-card{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.8rem;cursor:pointer;transition:all .25s;}
+.task-card:hover{border-color:rgba(200,147,10,.4);background:rgba(200,147,10,.07);}
+.task-card.done{border-color:rgba(46,125,50,.5);background:rgba(46,125,50,.08);}
+.task-icon{font-size:1.6rem;flex-shrink:0;}
+.task-info{flex:1;}
+.task-info h4{font-size:.9rem;font-weight:600;color:white;}
+.task-info p{font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.1rem;}
+.task-pts{font-size:.82rem;font-weight:600;color:var(--gold2);}
+.task-check{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;transition:all .2s;}
+.task-card.done .task-check{background:var(--green);border-color:var(--green);color:white;}
+.sg-progress{background:rgba(255,255,255,.07);border-radius:10px;padding:1rem;margin-top:.8rem;}
+.sgp-row{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.6rem;}
+.sgp-row span:first-child{color:rgba(255,255,255,.5);}
+.sgp-row span:last-child{color:var(--gold2);font-weight:600;}
+.sgp-track{height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;}
+.sgp-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .4s ease;}
+.btn-unlock{width:100%;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:14px;padding:1rem;color:white;font-size:1rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:1rem;opacity:.4;pointer-events:none;transition:all .25s;}
+.btn-unlock.ready{opacity:1;pointer-events:all;box-shadow:0 8px 24px rgba(200,147,10,.4);}
+.skip-link{text-align:center;color:rgba(255,255,255,.4);font-size:.8rem;margin-top:1rem;cursor:pointer;text-decoration:underline;}
+
+/* OFFER */
+.offer-hero{background:linear-gradient(135deg,var(--orange),var(--gold2));padding:2.8rem 1.8rem 3.5rem;text-align:center;position:relative;overflow:hidden;}
+.offer-hero::before{content:'🎉';position:absolute;font-size:7rem;opacity:.08;top:-15px;right:-15px;transform:rotate(20deg);}
+.offer-hero::after{content:'';position:absolute;bottom:-22px;left:0;right:0;height:44px;background:var(--cream);border-radius:50% 50% 0 0/100% 100% 0 0;}
+.oh-welcome{color:rgba(255,255,255,.88);font-size:.88rem;margin-bottom:.2rem;}
+.oh-name{font-family:'Playfair Display',serif;font-size:1.8rem;color:white;font-weight:700;}
+.confetti{font-size:2rem;display:block;margin-bottom:.5rem;animation:bounce 1s ease infinite alternate;}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.offer-body{padding:1.8rem 1.5rem;flex:1;}
+.oc{background:white;border-radius:18px;padding:1.6rem;margin-bottom:1rem;box-shadow:0 3px 18px rgba(0,0,0,.07);border:1px solid rgba(200,147,10,.1);position:relative;overflow:hidden;}
+.oc::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(to bottom,var(--gold),var(--orange));}
+.oc-badge{background:linear-gradient(135deg,var(--red),var(--red3));color:white;font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;display:inline-block;padding:.4rem 1.2rem;border-radius:10px;box-shadow:0 3px 12px rgba(139,0,0,.28);margin-bottom:.7rem;}
+.oc h3{font-size:1rem;font-weight:600;color:var(--brown);margin-bottom:.3rem;}
+.oc p{font-size:.82rem;color:var(--mid);line-height:1.5;}
+.code-box{background:var(--cream2);border:2px dashed var(--gold2);border-radius:11px;padding:.75rem 1rem;margin-top:.9rem;display:flex;align-items:center;justify-content:space-between;}
+.code-val{font-size:1.3rem;font-weight:700;letter-spacing:3px;color:var(--brown);}
+.copy-btn{background:var(--gold2);border:none;border-radius:8px;padding:.35rem .8rem;font-size:.72rem;font-weight:600;cursor:pointer;color:var(--brown);transition:all .2s;font-family:'DM Sans',sans-serif;}
+.copy-btn:hover{background:var(--orange);color:white;}
+.menu-section{background:white;border-radius:18px;padding:1.4rem;margin-bottom:1rem;box-shadow:0 3px 18px rgba(0,0,0,.07);}
+.menu-section h3{font-size:.9rem;font-weight:600;color:var(--brown);margin-bottom:.2rem;}
+.menu-section p{font-size:.75rem;color:var(--mid);margin-bottom:1rem;}
+.menu-item{display:flex;align-items:center;gap:.8rem;padding:.7rem 0;border-bottom:1px solid #F5EDE0;}
+.menu-item:last-child{border-bottom:none;}
+.mi-emoji{font-size:1.4rem;flex-shrink:0;}
+.mi-info{flex:1;}
+.mi-name{font-size:.88rem;font-weight:500;color:var(--brown);}
+.mi-price{font-size:.72rem;color:var(--mid);margin-top:.1rem;}
+.mi-offer{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:.2rem;}
+.mi-badge{font-size:.68rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;}
+.mi-badge.disc{background:rgba(139,0,0,.1);color:var(--red);}
+.decay-box{background:rgba(139,0,0,.06);border:1.5px solid rgba(139,0,0,.2);border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.7rem;}
+.decay-box .di{font-size:1.3rem;flex-shrink:0;}
+.decay-box .dt{font-size:.8rem;color:var(--red2);font-weight:500;line-height:1.4;}
+.ref-card{background:linear-gradient(135deg,#1a0000,#4a1200);border-radius:18px;padding:1.6rem;margin-bottom:1rem;color:white;position:relative;overflow:hidden;}
+.ref-card::before{content:'👥';position:absolute;font-size:5rem;right:-8px;bottom:-8px;opacity:.1;}
+.ref-card h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold2);margin-bottom:.45rem;}
+.ref-card p{color:rgba(255,255,255,.65);font-size:.82rem;line-height:1.5;margin-bottom:.9rem;}
+.ref-tiers{display:flex;gap:.5rem;margin-bottom:.9rem;}
+.rt{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(200,147,10,.2);border-radius:9px;padding:.55rem .4rem;text-align:center;}
+.rt-num{font-size:1.1rem;font-weight:700;color:var(--gold2);display:block;}
+.rt-label{font-size:.62rem;color:rgba(255,255,255,.55);margin-top:.1rem;}
+.rt.highlight{background:rgba(200,147,10,.15);border-color:rgba(200,147,10,.5);}
+.share-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;padding:.8rem;border-radius:12px;color:white;font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.45rem;transition:all .25s;font-family:'DM Sans',sans-serif;}
+.share-btn:hover{transform:translateY(-2px);}
+.btn-dash{width:100%;background:linear-gradient(135deg,var(--green),#1b5e20);color:white;border:none;padding:.95rem;border-radius:14px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:.5rem;font-family:'DM Sans',sans-serif;transition:all .25s;box-shadow:0 5px 18px rgba(46,125,50,.3);}
+.btn-dash:hover{transform:translateY(-2px);}
+
+/* DASHBOARD */
+.dash-header{background:linear-gradient(135deg,var(--red),var(--red2));padding:1.4rem 1.5rem;color:white;position:relative;overflow:hidden;}
+.dash-header::after{content:'';position:absolute;bottom:-18px;left:0;right:0;height:36px;background:var(--cream);border-radius:50% 50% 0 0/100% 100% 0 0;}
+.dh-greet{font-size:.75rem;opacity:.65;margin-bottom:.15rem;}
+.dh-name{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;}
+.dh-pill{display:inline-flex;align-items:center;gap:.35rem;background:rgba(200,147,10,.2);border:1px solid rgba(200,147,10,.4);color:var(--gold2);padding:.28rem .9rem;border-radius:50px;font-size:.76rem;margin-top:.45rem;}
+.dh-tier{display:inline-block;margin-left:.5rem;font-size:.7rem;padding:.15rem .5rem;border-radius:4px;background:rgba(255,255,255,.15);vertical-align:middle;}
+.dash-body{padding:1.8rem 1.5rem;flex:1;overflow-y:auto;}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.4rem;}
+.stat-c{background:white;border-radius:13px;padding:.9rem .7rem;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.stat-c .sn{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--red);display:block;}
+.stat-c .sl{font-size:.62rem;color:#999;margin-top:.15rem;font-weight:500;}
+.sec-head{font-size:.75rem;font-weight:600;color:var(--brown);text-transform:uppercase;letter-spacing:1px;margin-bottom:.7rem;display:flex;align-items:center;justify-content:space-between;}
+.pts-card{background:linear-gradient(135deg,#2a0000,#5a1a00);border-radius:18px;padding:1.4rem;margin-bottom:1rem;color:white;}
+.pts-label{font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.pts-value{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:900;color:var(--gold2);line-height:1;}
+.pts-sub{font-size:.75rem;color:rgba(255,255,255,.5);margin-top:.2rem;}
+.pts-bar{height:7px;background:rgba(255,255,255,.12);border-radius:7px;margin-top:1rem;overflow:hidden;}
+.pts-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));border-radius:7px;transition:width 1s ease;}
+.pts-tier-row{display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.45);margin-top:.4rem;}
+.decay-warn{background:rgba(183,28,28,.12);border:1.5px solid rgba(183,28,28,.3);border-radius:12px;padding:.85rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.7rem;}
+.decay-warn.hidden{display:none;}
+.decay-warn .di{font-size:1.2rem;}
+.decay-warn .dt{font-size:.78rem;color:#b71c1c;font-weight:500;line-height:1.4;}
+.rwd-list{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.4rem;}
+.rwd{background:white;border-radius:13px;padding:.9rem 1rem;display:flex;align-items:center;gap:.85rem;box-shadow:0 2px 10px rgba(0,0,0,.05);border-left:4px solid var(--gold2);}
+.rwd.used{opacity:.45;border-left-color:#CCC;}
+.rwd-icon{font-size:1.8rem;flex-shrink:0;}
+.rwd-info h4{font-size:.86rem;font-weight:600;color:var(--brown);}
+.rwd-info p{font-size:.72rem;color:#999;margin-top:.1rem;}
+.rwd-tag{margin-left:auto;background:var(--cream2);color:var(--brown);padding:.25rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;flex-shrink:0;}
+.rwd.used .rwd-tag{background:#F0F0F0;color:#999;}
+.ref-prog{background:white;border-radius:16px;padding:1.1rem;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:1.4rem;}
+.ref-dots{display:flex;gap:.5rem;margin:.7rem 0;}
+.rdot{width:38px;height:38px;border-radius:50%;border:2px solid #E0E0E0;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#CCC;transition:all .3s;}
+.rdot.filled{border-color:var(--green);background:rgba(46,125,50,.1);color:var(--green);}
+.prog-bar{height:5px;background:#F0F0F0;border-radius:50px;overflow:hidden;margin:.45rem 0;}
+.prog-fill{height:100%;background:linear-gradient(to right,var(--green),#66bb6a);border-radius:50px;transition:width .5s ease;}
+.prog-text{font-size:.72rem;color:#999;}
+.visits{background:white;border-radius:16px;padding:1.1rem;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.vi{display:flex;align-items:center;gap:.7rem;padding:.55rem 0;border-bottom:1px solid #F8F0E8;}
+.vi:last-child{border:none;}
+.vdot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0;}
+.vi p{font-size:.78rem;color:var(--brown);flex:1;}
+.vi span{font-size:.68rem;color:#BBB;}
+.menu-dash{background:white;border-radius:16px;padding:1.1rem;margin-bottom:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--brown);color:white;padding:.75rem 1.4rem;border-radius:50px;font-size:.82rem;font-weight:500;z-index:999;transition:transform .3s ease;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.3);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: WELCOME -->
+<div class="screen active" id="s-welcome">
+  <div class="welcome-bg">
+    <div class="w-diya">🪔</div>
+    <div class="w-name">Pandit Ji<br><em>Caterers & Sweets</em></div>
+    <div class="w-tag">स्वाद जो दिल को छू जाए</div>
+    <div class="w-badge">🎁 Loyalty Club — Join FREE</div>
+    <div class="w-chips">
+      <span class="chip">🍛 Catering</span>
+      <span class="chip">🍮 Sweets</span>
+      <span class="chip">🎂 Occasions</span>
+      <span class="chip">🍱 Tiffin</span>
+      <span class="chip">🎉 Events</span>
+    </div>
+    <p style="color:rgba(255,255,255,.65);font-size:.83rem;margin-bottom:1.5rem;line-height:1.6;position:relative;z-index:1;">Register karein aur paaein<br><strong style="color:var(--gold2);">Discounts, Birthday Gifts & Cashback!</strong></p>
+    <button class="btn-main" onclick="goTo('s-register')">🚀 Join & Get Discount</button>
+    <div class="w-member" onclick="goTo('s-dashboard')">Already a member? My Dashboard →</div>
+  </div>
+</div>
+
+<!-- SCREEN 2: REGISTER -->
+<div class="screen" id="s-register">
+  <div class="form-header">
+    <button class="back" onclick="goTo('s-welcome')">← Back</button>
+    <div class="fh-title">Customer Registration</div>
+    <div class="fh-sub">Join our Loyalty Program — free forever</div>
+  </div>
+  <div class="form-body">
+    <div id="ref-notice" style="display:none;background:rgba(200,147,10,.12);border:1px solid var(--gold);color:var(--brown);padding:.7rem 1rem;border-radius:10px;margin-bottom:1rem;font-size:.82rem;font-weight:500;"></div>
+    <div class="fsec">👤 Personal Info</div>
+    <div class="fg"><label>Full Name <em>*</em></label><input class="fc" id="r-name" type="text" placeholder="Aapka poora naam..."></div>
+    <div class="fg2">
+      <div class="fg"><label>Mobile <em>*</em></label><input class="fc" id="r-phone" type="tel" placeholder="9876543210" maxlength="10"></div>
+      <div class="fg"><label>Date of Birth <em>*</em></label><input class="fc" id="r-dob" type="date"></div>
+    </div>
+    <div class="fg2">
+      <div class="fg"><label>Anniversary</label><input class="fc" id="r-anni" type="date"></div>
+      <div class="fg"><label>Area / City</label><input class="fc" id="r-city" placeholder="Mohalla..."></div>
+    </div>
+    <div class="fsec">🍽️ Favourite Items</div>
+    <div class="dish-grid">
+      <div class="dopt"><input type="checkbox" id="d1" value="Dal Baati"><label for="d1"><span class="de">🫕</span>Dal Baati</label></div>
+      <div class="dopt"><input type="checkbox" id="d2" value="Gulab Jamun"><label for="d2"><span class="de">🟤</span>Gulab Jamun</label></div>
+      <div class="dopt"><input type="checkbox" id="d3" value="Biryani"><label for="d3"><span class="de">🍚</span>Biryani</label></div>
+      <div class="dopt"><input type="checkbox" id="d4" value="Ladoo"><label for="d4"><span class="de">🟡</span>Ladoo</label></div>
+      <div class="dopt"><input type="checkbox" id="d5" value="Kachori"><label for="d5"><span class="de">🥙</span>Kachori</label></div>
+      <div class="dopt"><input type="checkbox" id="d6" value="Halwa"><label for="d6"><span class="de">🍯</span>Halwa</label></div>
+      <div class="dopt"><input type="checkbox" id="d7" value="Paneer"><label for="d7"><span class="de">🧀</span>Paneer</label></div>
+      <div class="dopt"><input type="checkbox" id="d8" value="Barfi"><label for="d8"><span class="de">🍫</span>Barfi</label></div>
+      <div class="dopt"><input type="checkbox" id="d9" value="Raita"><label for="d9"><span class="de">🥣</span>Raita</label></div>
+    </div>
+    <div class="fsec">🎉 Occasions</div>
+    <div class="occ-grid">
+      <div class="oopt"><input type="checkbox" id="o1" value="Wedding"><label for="o1">💍 Shaadi</label></div>
+      <div class="oopt"><input type="checkbox" id="o2" value="Birthday"><label for="o2">🎂 Birthday</label></div>
+      <div class="oopt"><input type="checkbox" id="o3" value="Pooja"><label for="o3">🪔 Pooja</label></div>
+      <div class="oopt"><input type="checkbox" id="o4" value="Corporate"><label for="o4">🏢 Corporate</label></div>
+      <div class="oopt"><input type="checkbox" id="o5" value="Festival"><label for="o5">🎊 Festival</label></div>
+      <div class="oopt"><input type="checkbox" id="o6" value="Tiffin"><label for="o6">🍱 Tiffin</label></div>
+    </div>
+    <div class="fsec">💰 Budget</div>
+    <div class="fg2">
+      <div class="fg"><label>Average Budget</label>
+        <select class="fc" id="r-budget">
+          <option value="">Select...</option>
+          <option>Under ₹500</option><option>₹500–₹2,000</option>
+          <option>₹2,000–₹5,000</option><option>₹5,000–₹15,000</option>
+          <option>Above ₹15,000</option>
+        </select>
+      </div>
+      <div class="fg"><label>Kaise aaye?</label>
+        <select class="fc" id="r-source">
+          <option value="">Select...</option>
+          <option>Friend / Family</option><option>Google Maps</option>
+          <option>Instagram</option><option>WhatsApp</option>
+          <option>Regular customer</option>
+        </select>
+      </div>
+    </div>
+    <div class="fsec">⭐ Rate Last Visit</div>
+    <div class="stars" id="stars">
+      <button class="star" onclick="setStar(1)">★</button>
+      <button class="star" onclick="setStar(2)">★</button>
+      <button class="star" onclick="setStar(3)">★</button>
+      <button class="star" onclick="setStar(4)">★</button>
+      <button class="star" onclick="setStar(5)">★</button>
+    </div>
+    <div class="fg" style="margin-top:.9rem;"><label>Feedback (optional)</label><textarea class="fc" id="r-feedback" rows="2" placeholder="Aapki valuable feedback..."></textarea></div>
+    <button class="btn-sub" id="sub-btn" onclick="submitReg()">🎁 Register & Get Discount</button>
+  </div>
+</div>
+
+<!-- SCREEN 3: SOCIAL -->
+<div class="screen" id="s-social">
+  <div class="sg-bg">
+    <div class="sg-lock">🎉</div>
+    <div class="sg-title">Registered!</div>
+    <div class="sg-sub">Social media pe connect karo aur bonus points pao</div>
+    <div class="task-card" id="t-ig" onclick="doTask('ig',25,'https://instagram.com/panditjicaterers')">
+      <div class="task-icon">📸</div>
+      <div class="task-info"><h4>Instagram Follow Karo</h4><p>@panditjicaterers follow karo</p></div>
+      <div class="task-pts">+25 pts</div>
+      <div class="task-check" id="tc-ig">→</div>
+    </div>
+    <div class="task-card" id="t-gg" onclick="doTask('gg',30,'https://maps.google.com')">
+      <div class="task-icon">⭐</div>
+      <div class="task-info"><h4>Google Review Do (5★)</h4><p>Sabse important — 30 seconds</p></div>
+      <div class="task-pts">+30 pts</div>
+      <div class="task-check" id="tc-gg">→</div>
+    </div>
+    <div class="task-card" id="t-wa" onclick="doTask('wa',20,'https://wa.me/919999999999')">
+      <div class="task-icon">💬</div>
+      <div class="task-info"><h4>WhatsApp Group Join Karo</h4><p>Offers pehle milenge</p></div>
+      <div class="task-pts">+20 pts</div>
+      <div class="task-check" id="tc-wa">→</div>
+    </div>
+    <div class="task-card" id="t-fb" onclick="doTask('fb',15,'https://facebook.com/panditjicaterers')">
+      <div class="task-icon">👍</div>
+      <div class="task-info"><h4>Facebook Like Karo</h4><p>Updates milte rahenge</p></div>
+      <div class="task-pts">+15 pts</div>
+      <div class="task-check" id="tc-fb">→</div>
+    </div>
+    <div class="sg-progress">
+      <div class="sgp-row"><span id="sg-done-lbl">0 of 4</span><span id="sg-pts-lbl">0 / 90 bonus pts</span></div>
+      <div class="sgp-track"><div class="sgp-fill" id="sg-fill" style="width:0%"></div></div>
+    </div>
+    <button class="btn-unlock" id="btn-unlock" onclick="goTo('s-offer')">🎁 Offer Dekho →</button>
+    <div class="skip-link" onclick="goTo('s-offer')">Skip — baad mein karta hoon</div>
+  </div>
+</div>
+
+<!-- SCREEN 4: OFFER -->
+<div class="screen" id="s-offer">
+  <div class="offer-hero">
+    <span class="confetti">🎊</span>
+    <div class="oh-welcome">Welcome to the family,</div>
+    <div class="oh-name" id="offer-name">Valued Customer!</div>
+  </div>
+  <div class="offer-body">
+    <div class="oc">
+      <div class="oc-badge">10% OFF</div>
+      <h3>🎁 Welcome Discount</h3>
+      <p>Pehli ya agli purchase pe seedha 10% off. Counter pe yeh code dikhaein!</p>
+      <div class="code-box">
+        <span class="code-val" id="disc-code">PANDIT10</span>
+        <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+      </div>
+    </div>
+    <div class="decay-box">
+      <span class="di">⏳</span>
+      <div class="dt">Points 15 din baad se ghatte shuru ho jaate hain. Active raho aur apna tier bachao!</div>
+    </div>
+    <div class="menu-section" id="menu-section" style="display:none">
+      <h3>🍽️ Aaj Ke Special Offers</h3>
+      <p>Inhe order karein aur zyada points paaein</p>
+      <div id="menu-items-offer"></div>
+    </div>
+    <div class="oc">
+      <div class="oc-badge" style="background:linear-gradient(135deg,var(--orange),var(--gold2));font-size:1.9rem;padding:.35rem 1rem;">🎂 FREE</div>
+      <h3>Birthday Special</h3>
+      <p>Birthday month mein aayein — <strong>Free 250g Mithai Box</strong> + 15% off!</p>
+    </div>
+    <div class="ref-card">
+      <h3>👥 Refer & Earn!</h3>
+      <p>3 doston ko refer karein — ₹200 cash + free delivery!</p>
+      <div class="ref-tiers">
+        <div class="rt"><span class="rt-num">1</span><div class="rt-label">₹50 Off</div></div>
+        <div class="rt"><span class="rt-num">2</span><div class="rt-label">₹120 Off</div></div>
+        <div class="rt highlight"><span class="rt-num">3</span><div class="rt-label">₹200+FREE</div></div>
+      </div>
+      <button class="share-btn" onclick="shareRef()">📤 Referral Link Share Karo</button>
+    </div>
+    <button class="btn-dash" onclick="goTo('s-dashboard')">📊 My Dashboard Dekho</button>
+  </div>
+</div>
+
+<!-- SCREEN 5: DASHBOARD -->
+<div class="screen" id="s-dashboard">
+  <div class="dash-header">
+    <button class="back" onclick="goTo('s-offer')" style="color:rgba(255,255,255,.7)">← Back</button>
+    <div class="dh-greet">Namaste 🙏</div>
+    <div class="dh-name" id="dash-name">Valued Customer <span class="dh-tier" id="dash-tier">🥈 Silver</span></div>
+    <div class="dh-pill">⭐ <span id="dash-pts">0</span> Loyalty Points</div>
+  </div>
+  <div class="dash-body">
+    <div class="decay-warn hidden" id="decay-alert">
+      <span class="di">🚨</span>
+      <div class="dt" id="decay-msg">Aapke points expire hone wale hain! Jaldi aayein.</div>
+    </div>
+    <div class="stats3">
+      <div class="stat-c"><span class="sn" id="d-visits">0</span><div class="sl">Visits</div></div>
+      <div class="stat-c"><span class="sn" id="d-saved">₹0</span><div class="sl">Saved</div></div>
+      <div class="stat-c"><span class="sn" id="d-refs">0</span><div class="sl">Referrals</div></div>
+    </div>
+    <div class="pts-card">
+      <div class="pts-label">Loyalty Points</div>
+      <div class="pts-value" id="pts-big">0</div>
+      <div class="pts-sub" id="pts-sub">Silver — 50 more to Gold!</div>
+      <div class="pts-bar"><div class="pts-fill" id="pts-fill" style="width:0%"></div></div>
+      <div class="pts-tier-row"><span>🥈 Silver (50)</span><span>🥇 Gold (300)</span><span>💎 VIP (700)</span></div>
+    </div>
+    <div class="menu-dash" id="menu-dash" style="display:none">
+      <div class="sec-head">🍽️ Active Item Offers</div>
+      <div id="menu-dash-items"></div>
+    </div>
+    <div class="sec-head">🎁 My Rewards</div>
+    <div class="rwd-list">
+      <div class="rwd"><span class="rwd-icon">🎂</span><div class="rwd-info"><h4>Birthday Discount</h4><p>Birthday month mein valid</p></div><span class="rwd-tag">15% OFF</span></div>
+      <div class="rwd"><span class="rwd-icon">👥</span><div class="rwd-info"><h4>Referral Reward</h4><p id="ref-sub">2 aur friends chahiye</p></div><span class="rwd-tag" id="ref-tag">₹50 Earned</span></div>
+      <div class="rwd used"><span class="rwd-icon">🎁</span><div class="rwd-info"><h4>Welcome Discount</h4><p>Used on first visit</p></div><span class="rwd-tag">Used ✓</span></div>
+    </div>
+    <div class="sec-head">👥 Referral Progress</div>
+    <div class="ref-prog">
+      <p style="font-size:.83rem;color:#666;margin-bottom:.3rem;" id="ref-prog-text">0/3 friends referred</p>
+      <div class="ref-dots">
+        <div class="rdot" id="rd1">1</div>
+        <div class="rdot" id="rd2">2</div>
+        <div class="rdot" id="rd3">3</div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <p class="prog-text" id="prog-text">Share karo aur ₹200 kamao!</p>
+    </div>
+    <div class="sec-head" style="margin-top:1.4rem;">📋 Visit History</div>
+    <div class="visits" id="visit-history">
+      <div class="vi"><div class="vdot"></div><p>Registration — Welcome bonus</p><span>Today</span></div>
+    </div>
+    <button class="share-btn" style="margin-top:1.4rem;background:linear-gradient(135deg,var(--red),var(--red3));" onclick="shareRef()">📤 Refer Friends & Earn More</button>
+    <button class="back" style="width:100%;justify-content:center;margin-top:.8rem;color:var(--mid);font-size:.8rem;" onclick="logoutCustomer()">🚪 Logout</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cust = null, sgDone = 0, sgPts = 0, sgDoneMap = {}, starRating = 0;
+
+window.onload = async () => {
+  document.getElementById('r-dob').max = new Date().toISOString().split('T')[0];
+  const saved = localStorage.getItem('pjc_cust');
+  if (saved) {
+    cust = JSON.parse(saved);
+    try {
+      const snap = await db.collection('customers').doc(cust.id).get();
+      if (snap.exists) { cust = {id: snap.id, ...snap.data()}; localStorage.setItem('pjc_cust', JSON.stringify(cust)); }
+    } catch(e) {}
+    loadDash(); goTo('s-dashboard'); return;
+  }
+  const ref = new URLSearchParams(location.search).get('ref');
+  if (ref) {
+    try {
+      const rs = await db.collection('customers').doc(ref).get();
+      if (rs.exists) {
+        const n = document.getElementById('ref-notice');
+        n.style.display = 'block';
+        n.textContent = `👥 ${rs.data().name} ne aapko refer kiya! Register karte hi 50 bonus points milenge!`;
+      }
+    } catch(e) {}
+  }
+  loadMenuItems();
+};
+
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function setStar(n) {
+  starRating = n;
+  document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < n));
+}
+
+async function submitReg() {
+  const name = document.getElementById('r-name').value.trim();
+  const phone = document.getElementById('r-phone').value.trim();
+  const dob = document.getElementById('r-dob').value;
+  if (!name) return toast('⚠️ Naam zaroor likhein');
+  if (!phone || phone.length !== 10 || isNaN(phone)) return toast('⚠️ Sahi 10-digit mobile number likhein');
+  if (!dob) return toast('⚠️ Date of birth bharen');
+
+  const btn = document.getElementById('sub-btn');
+  btn.disabled = true; btn.textContent = '⏳ Register ho raha hai...';
+
+  try {
+    // Duplicate phone check
+    const ex = await db.collection('customers').where('phone','==',phone).get();
+    if (!ex.empty) {
+      cust = {id: ex.docs[0].id, ...ex.docs[0].data()};
+      localStorage.setItem('pjc_cust', JSON.stringify(cust));
+      toast('✅ Aap pehle se registered hain!');
+      loadDash(); setTimeout(() => goTo('s-dashboard'), 1200);
+      return;
+    }
+
+    const ref = new URLSearchParams(location.search).get('ref');
+    // Self-referral check
+    if (ref) {
+      const refDoc = await db.collection('customers').doc(ref).get();
+      if (refDoc.exists && refDoc.data().phone === phone) {
+        toast('❌ Apne aap ko refer nahi kar sakte!');
+        btn.disabled = false; btn.textContent = '🎁 Register & Get Discount';
+        return;
+      }
+    }
+
+    const dishes = [...document.querySelectorAll('input[id^=d]:checked')].map(x => x.value);
+    const occs = [...document.querySelectorAll('input[id^=o]:checked')].map(x => x.value);
+    const id = 'PJC' + Date.now().toString().slice(-5) + Math.floor(Math.random()*10);
+    const welPts = 50 + (ref ? 50 : 0);
+
+    const data = {
+      id, name, phone, birthday: dob,
+      anniversary: document.getElementById('r-anni').value || null,
+      city: document.getElementById('r-city').value || null,
+      budget: document.getElementById('r-budget').value || null,
+      source: document.getElementById('r-source').value || null,
+      dishes, occasions: occs,
+      feedback: document.getElementById('r-feedback').value || null,
+      rating: starRating || null,
+      points: welPts, visits: 0, referralCount: 0, referralBonus: 0,
+      referredBy: ref || null, tier: 'Silver',
+      joinDate: firebase.firestore.FieldValue.serverTimestamp(),
+      joinDateStr: new Date().toLocaleDateString('en-IN'),
+      lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+      lastVisitDays: 0, totalSpend: 0, active: true
+    };
+
+    await db.collection('customers').doc(id).set(data);
+
+    // Credit referrer (max 3 referrals)
+    if (ref) {
+      try {
+        const refDoc = await db.collection('customers').doc(ref).get();
+        if (refDoc.exists && (refDoc.data().referralCount || 0) < 3) {
+          await db.collection('customers').doc(ref).update({
+            points: firebase.firestore.FieldValue.increment(200),
+            referralCount: firebase.firestore.FieldValue.increment(1),
+            referralBonus: firebase.firestore.FieldValue.increment(200)
+          });
+          await db.collection('referrals').add({referrer: ref, newCust: id, date: firebase.firestore.FieldValue.serverTimestamp(), bonus: 200, status: 'pending'});
+        }
+      } catch(e) {}
+    }
+
+    cust = {...data, id};
+    localStorage.setItem('pjc_cust', JSON.stringify(cust));
+    document.getElementById('disc-code').textContent = 'PANDIT' + phone.slice(-4);
+    document.getElementById('offer-name').textContent = name.split(' ')[0] + ' Ji! 🙏';
+    loadMenuItems();
+    goTo('s-social');
+  } catch(e) {
+    toast('❌ Error: ' + e.message);
+    btn.disabled = false; btn.textContent = '🎁 Register & Get Discount';
+  }
+}
+
+function doTask(id, pts, url) {
+  if (sgDoneMap[id]) return;
+  window.open(url, '_blank');
+  sgDoneMap[id] = true;
+  document.getElementById('t-' + id).classList.add('done');
+  document.getElementById('tc-' + id).textContent = '✓';
+  sgDone++; sgPts += pts;
+  document.getElementById('sg-done-lbl').textContent = sgDone + ' of 4';
+  document.getElementById('sg-pts-lbl').textContent = sgPts + ' / 90 bonus pts';
+  document.getElementById('sg-fill').style.width = (sgPts / 90 * 100) + '%';
+  if (sgDone >= 2) {
+    document.getElementById('btn-unlock').classList.add('ready');
+    document.getElementById('btn-unlock').textContent = '🎁 Offer Unlock Ho Gaya →';
+  }
+  if (cust) {
+    db.collection('customers').doc(cust.id).update({points: firebase.firestore.FieldValue.increment(pts)}).catch(()=>{});
+    cust.points = (cust.points || 0) + pts;
+    localStorage.setItem('pjc_cust', JSON.stringify(cust));
+  }
+}
+
+async function loadMenuItems() {
+  try {
+    const snap = await db.collection('shopConfig').doc('menu').get();
+    if (!snap.exists) return;
+    const items = snap.data().items || [];
+    const active = items.filter(i => i.discountActive && i.discountPct > 0);
+    if (!active.length) return;
+    document.getElementById('menu-section').style.display = 'block';
+    document.getElementById('menu-items-offer').innerHTML = active.map(item => `
+      <div class="menu-item">
+        <span class="mi-emoji">${item.emoji||'🍽️'}</span>
+        <div class="mi-info"><div class="mi-name">${item.name}</div><div class="mi-price">₹${item.price}</div></div>
+        <div class="mi-offer"><span class="mi-badge disc">${item.discountPct}% OFF</span></div>
+      </div>`).join('');
+    document.getElementById('menu-dash').style.display = 'block';
+    document.getElementById('menu-dash-items').innerHTML = active.map(item => `
+      <div class="vi">
+        <span style="font-size:1.2rem;flex-shrink:0">${item.emoji||'🍽️'}</span>
+        <p>${item.name} — ₹${item.price}</p>
+        <span class="mi-badge disc" style="font-size:.68rem;padding:.18rem .5rem;">${item.discountPct}% OFF</span>
+      </div>`).join('');
+  } catch(e) {}
+}
+
+function loadDash() {
+  if (!cust) return;
+  document.getElementById('dash-name').childNodes[0].textContent = cust.name + ' ';
+  const pts = cust.points || 0;
+  document.getElementById('dash-pts').textContent = pts;
+  document.getElementById('pts-big').textContent = pts;
+  document.getElementById('d-visits').textContent = cust.visits || 0;
+  document.getElementById('d-saved').textContent = '₹' + Math.floor((cust.totalSpend || 0) * 0.1);
+  document.getElementById('d-refs').textContent = cust.referralCount || 0;
+
+  let tier = '🥈 Silver', fill = Math.min((pts / 300) * 100, 100);
+  if (pts >= 700) { tier = '💎 VIP'; fill = 100; }
+  else if (pts >= 300) { tier = '🥇 Gold'; fill = Math.min(((pts-300)/400)*100+60, 100); }
+  document.getElementById('dash-tier').textContent = tier;
+  document.getElementById('pts-fill').style.width = fill + '%';
+  document.getElementById('pts-sub').textContent = pts >= 700 ? '🎉 VIP Diamond!' : pts >= 300 ? `Gold — ${700-pts} more to VIP!` : `Silver — ${300-pts} more to Gold!`;
+
+  const lv = cust.lastVisitDays || 0;
+  if (lv >= 12) {
+    document.getElementById('decay-alert').classList.remove('hidden');
+    document.getElementById('decay-msg').textContent = lv >= 20
+      ? `🚨 ${lv} din ho gaye! Tier gir sakta hai. Jaldi aayein!`
+      : `⚠️ ${lv} din ho gaye! ${15-lv} din baad points ghate shuru honge.`;
+  }
+
+  const refs = cust.referralCount || 0;
+  ['rd1','rd2','rd3'].forEach((id, i) => {
+    if (i < refs) { document.getElementById(id).classList.add('filled'); document.getElementById(id).textContent = '✓'; }
+  });
+  document.getElementById('prog-fill').style.width = Math.min((refs/3)*100, 100) + '%';
+  document.getElementById('ref-prog-text').textContent = refs >= 3 ? '🎉 3 referrals complete! ₹200 claim karo!' : `${refs}/3 friends — ${3-refs} aur chahiye`;
+  document.getElementById('prog-text').textContent = refs >= 3 ? '₹200 cash bonus earned!' : 'Share karo aur ₹200 kamao!';
+  if (refs > 0) {
+    document.getElementById('ref-sub').textContent = refs >= 3 ? 'Bonus earned!' : `${3-refs} aur friends chahiye`;
+    document.getElementById('ref-tag').textContent = `₹${[0,50,120,200][Math.min(refs,3)]} Earned`;
+  }
+
+  document.getElementById('offer-name').textContent = cust.name.split(' ')[0] + ' Ji! 🙏';
+  document.getElementById('disc-code').textContent = 'PANDIT' + cust.phone.slice(-4);
+  loadMenuItems();
+}
+
+function shareRef() {
+  if (!cust) { toast('⚠️ Pehle register karein!'); return; }
+  const link = `${location.origin}${location.pathname}?ref=${cust.id}`;
+  const msg = `🪔 *Pandit Ji Caterers & Sweets*\n\nMere saath join karo aur pao special discount + 50 bonus points! 🎁\n\nMera referral code: *${cust.id}*\n👉 ${link}\n\n🍛 Best Sweets & Catering!`;
+  if (navigator.share) navigator.share({title:'Pandit Ji Caterers', text: msg});
+  else { navigator.clipboard.writeText(msg); toast('📤 Share text copy ho gaya!'); }
+}
+
+function copyCode() {
+  const code = document.getElementById('disc-code').textContent;
+  navigator.clipboard.writeText(code).then(() => toast('✅ Code copy: ' + code)).catch(() => toast('Code: ' + code));
+}
+
+function logoutCustomer() {
+  localStorage.removeItem('pjc_cust'); cust = null;
+  goTo('s-welcome'); toast('👋 Logout ho gaya!');
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-Z4GGVJfkUFkPjXihi2YyVZAOlxavAAU",
+    authDomain: "panditji-loyalty.firebaseapp.com",
+    projectId: "panditji-loyalty",
+    storageBucket: "panditji-loyalty.firebasestorage.app",
+    messagingSenderId: "625570900306",
+    appId: "1:625570900306:web:d73c2f445a99436774f28b"
+  };
+
+  // Initialize Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+</script>
+</body>
+</html>
